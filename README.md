@@ -99,7 +99,7 @@ Si positionX t > 10
 	TourneGauche g 10;
 }
 
-TantQue positionY t < 20 
+Tq positionY t < 20 
 {
 	Avance t 10;
 }
