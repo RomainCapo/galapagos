@@ -43,32 +43,32 @@ Le langage doit être compilé au travers des étapes suivantes :
 
 ### Mots clés réservés
 
-* **Tortue <nom> = <Galapagos>, <positionX>, <positionY>, <angle>;**
-Crée une nouvelle tortue dans la zone <Galapagos>, en position <positionX>;<postionY> et d'angle <angle>. Les angles suivent la logique d'un cercle trigonométrique.
-* **Galapagos <nom> = <positionX>, <positionY>, <width>, <height>;**
-Créer une zone dans laquelle peut se déplacer une ou plusieurs tortue
-* **Avance <tortue> <quantité>;**
-Fait avancer une <tortue> d'une certaine <quantité>
-* **Recule <tortue> <quantité>;**
-Fait reculer une <tortue> d'une certaine <quantité>
-* **TourneGauche <tortue> <angle>;**
-Fait tourner la tortue dans le sens antihoraire 
-* **TourneDroite <tortue> <angle>;**
-Fait tourner la tortue dans le sen horaire
-* **Decoller <tortue>;**
-La Tortue ne dessine plus son tracé derrière elle
-* **Atterrir <tortue>;**
-La Tortue dessine le tracé derrière elle
-* **Si <condition> { <instruction> }**
-<instruction> est executé uniquement si <condition> est satisfait
-* **Tq <condition> { <instruction> }**
-<instruction> est executé tant que <condition> est satisfait
-* **positionX <tortue>**
-Retourne la position actuelle de la tortue sur l'axe X
-* **positionY <tortue>**
-Retourne la position actuelle de la tortue sur l'axe Y
-* **§§ <texte>**
-Commentaire
+* **Tortue < nom > = < Galapagos >, < positionX >, < positionY >, < angle >;**
+<br/>Crée une nouvelle tortue dans la zone <Galapagos>, en position <positionX>;<postionY> et d'angle <angle>. Les angles suivent la logique d'un cercle trigonométrique.
+* **Galapagos < nom > = < positionX >, < positionY >, < width >, < height >;**
+<br/>Créer une zone dans laquelle peut se déplacer une ou plusieurs tortue
+* **Avance < tortue > < quantité >;**
+<br/>Fait avancer une <tortue> d'une certaine <quantité>
+* **Recule < tortue > < quantité >;**
+<br/>Fait reculer une <tortue> d'une certaine <quantité>
+* **TourneGauche < tortue > < angle >;**
+<br/>Fait tourner la tortue dans le sens antihoraire 
+* **TourneDroite < tortue > < angle >;**
+<br/>Fait tourner la tortue dans le sen horaire
+* **Decoller < tortue >;**
+<br/>La Tortue ne dessine plus son tracé derrière elle
+* **Atterrir < tortue >;**
+<br/>La Tortue dessine le tracé derrière elle
+* **Si < condition > { < instruction > }**
+<br/><instruction> est executé uniquement si <condition> est satisfait
+* **Tq < condition > { < instruction > }**
+<br/><instruction> est executé tant que <condition> est satisfait
+* **positionX < tortue >**
+<br/>Retourne la position actuelle de la tortue sur l'axe X
+* **positionY < tortue >**
+<br/>Retourne la position actuelle de la tortue sur l'axe Y
+* **§§ < texte >**
+<br/>Commentaire
 
 ### Conventions
 
