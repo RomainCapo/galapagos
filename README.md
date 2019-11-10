@@ -9,13 +9,13 @@ Année 2019-2020.
 François Bouthillier de Beaumont, Romain Capocasale, Jonas Freiburghaus
 
 ## Cahier des charges
-Le but de projet est de créer un language et de le compiler vers du JavaScript, afin de pouvoir dessiner instictivement sur un canvas HTML. Ainsi, grâce à une syntaxe très lisible, l'utilisateur du langague aurait la possibilité de créer des acteurs, les tortues, et de les déplacer sur le canvas. 
-Un acteur (Tortue) a une position X, une position Y et un sens. 
+Le but de projet est de créer un language et de le compiler vers du JavaScript, afin de pouvoir dessiner instictivement sur un canvas HTML. Ainsi, grâce à une syntaxe très lisible, l'utilisateur du langague aurait la possibilité de créer des acteurs, les tortues, et de les déplacer sur le canvas.
+Un acteur (Tortue) a une position X, une position Y et un sens.
 Une tortue fait partie d'une zone (Galapagos) et ne peut en sortir. Elle peut se déplacer en avant et en arrière, et peut tourner sur elle même.
 Selon la volonté de l'utilisateur, une tortue dessine derrière elle ou non.
 
-Le compilateur devra aussi verifier que l'utilisateur n'effectue pas d'opération illégale. Les opérations considérés comme illégales sont : 
- 
+Le compilateur devra aussi verifier que l'utilisateur n'effectue pas d'opération illégale. Les opérations considérés comme illégales sont :
+
  * Deux tortues ne peuvent entrer en collision.
  * Une tortue ne peut sortir de sa zone (Galapagos).
 
@@ -38,7 +38,7 @@ Le langage doit être compilé au travers des étapes suivantes :
 * Boucle
 * Fonctions préfaites
 * Commentaires uniligne
-* (Evaluation algébrique) 
+* (Evaluation algébrique)
 
 
 ### Mots clés réservés
@@ -47,13 +47,13 @@ Le langage doit être compilé au travers des étapes suivantes :
 <br/>Crée une nouvelle tortue dans la zone <Galapagos>, en position <positionX>;<postionY> et d'angle <angle>. Les angles suivent la logique d'un cercle trigonométrique.
 * **Galapagos < nom > = < positionX >, < positionY >, < width >, < height >;**
 <br/>Créer une zone dans laquelle peut se déplacer une ou plusieurs tortue
-* **Avance < tortue > < quantité >;**
+* **Avancer < tortue > < quantité >;**
 <br/>Fait avancer une <tortue> d'une certaine <quantité>
-* **Recule < tortue > < quantité >;**
+* **Reculer < tortue > < quantité >;**
 <br/>Fait reculer une <tortue> d'une certaine <quantité>
-* **TourneGauche < tortue > < angle >;**
-<br/>Fait tourner la tortue dans le sens antihoraire 
-* **TourneDroite < tortue > < angle >;**
+* **TournerGauche < tortue > < angle >;**
+<br/>Fait tourner la tortue dans le sens antihoraire
+* **TournerDroite < tortue > < angle >;**
 <br/>Fait tourner la tortue dans le sen horaire
 * **Decoller < tortue >;**
 <br/>La Tortue ne dessine plus son tracé derrière elle
@@ -69,6 +69,18 @@ Le langage doit être compilé au travers des étapes suivantes :
 <br/>Retourne la position actuelle de la tortue sur l'axe Y
 * **§§ < texte >**
 <br/>Commentaire
+
+### Gramaire
+
+* **expression : NUMBER | IDENTIFIER**
+* **expression : expression COMPARISON_OP expression**
+* **assignation : IDENTIFIER '=' expression
+  | GALAPAGOS IDENTIFIER '=' expression ',' expression ',' expression ',' expression
+  | TORTUE IDENTIFIER '=' expression ',' expression ',' expression ',' expression**
+* **programme : statement ';' programme**
+* **programme : statement ';'**
+* **structure : TQ expression '{' programme '}'**
+* **statement : assignation | structure**
 
 ### Conventions
 
@@ -87,20 +99,20 @@ Le langage doit être compilé au travers des étapes suivantes :
 Galapagos g = 0, 10, 50, 50;  §§ Definis une zone pour une tortue
 Tortue t = g, 10,10, 0; §§ Cree une tortue dans la zone g
 
-Avance t 10;
-Recule t 10;
-TourneGauche t 10;
-TourneDroite t 30;
+Avancer t 10;
+Reculer t 10;
+TournerGauche t 10;
+TournerDroite t 30;
 Decoller t;
-Atterir t;
+Atterrir t;
 
-Si positionX t > 10 
+Si positionX t > 10
 {
-	TourneGauche g 10;
-}
+	TournerGauche g 10;
+};
 
-Tq positionY t < 20 
+Tq positionY t < 20
 {
-	Avance t 10;
-}
+	Avancer t 10;
+};
 ```

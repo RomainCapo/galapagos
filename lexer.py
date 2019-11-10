@@ -5,24 +5,24 @@ reserved_words = (
 	'TQ',
     'GALAPAGOS',
     'TORTUE',
-    'AVANCE',
-    'TOURNEGAUCHE',
-    'TOURNEDROITE',
+    'AVANCER',
+	'RECULER',
+    'TOURNERGAUCHE',
+    'TOURNERDROITE',
     'DECOLLER',
-    'ATTERIR',
+    'ATTERRIR',
+	'POSITIONX',
+	'POSITIONY',
 )
 
 tokens = (
     'NUMBER',
     'IDENTIFIER',
-    'VARIABLE',
     'COMMENTS',
 	'COMPARISON_OP',
-    'AFFECTATION_OP',
-    'SEPARATOR',
-) + tuple(map(lambda s:s.upper(),reserved_words))
+) + tuple(map(lambda s:s.upper(), reserved_words))
 
-literals = '();={}'
+literals = '();={},'
 
 def t_NUMBER(t):
     r'\d+'
@@ -30,29 +30,19 @@ def t_NUMBER(t):
     return t
 
 def t_IDENTIFIER(t):
-	r'[A-Z]+[a-zA-Z]+'
-	if t.value in reserved_words:
+	r'[a-zA-Z_]\w*'
+	if t.value.upper() in reserved_words:
 		t.type = t.value.upper()
 	return t
 
-def t_VARIABLE(t):
-    r'[A-Za-z]+'
-    t.value = str(t.value)
-    return t
-
 def t_COMMENTS(t):
 	r'//.*\n'
-	t.value = str(t.value)
 	t.lexer.lineno += 1
-	return t
+	# Pas de retourne car non utilisé par l'analyseur syntaxique
 
 def t_COMPARISON_OP(t):
 	r'[><]'
 	return t
-
-t_AFFECTATION_OP = '='
-
-t_SEPARATOR = ','
 
 def t_newline(t):
     r'\n+'
@@ -64,13 +54,12 @@ def t_error(t):
 
 t_ignore = ' \t'
 
-
 lex.lex()
 
 if __name__ == "__main__":
     import sys
 
-    prog = open("../inputs/" + sys.argv[1]).read()
+    prog = open("inputs/" + sys.argv[1]).read()
 
     lex.input(prog)
 
