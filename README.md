@@ -29,6 +29,17 @@ Le langage doit être compilé au travers des étapes suivantes :
 * Analyse sémantique
 * Génération de code
 
+## Objectifs principaux
+
+Notre language permettra la compilation vers du Javascript et offrira les possibilités suivantes:
+   * Initialisation d'acteurs
+   * Déplacement et rotation d'acteurs
+   * Initialisation de zones liées aux acteurs
+   * Tracé (ou non) derrière les acteurs
+   * Opérations illégales:
+      * Impossibilité de mener des acteurs en dehors de leur zone
+      * Impossibilité de mener des acteurs à une collision
+
 ## Fonctionnement du langage
 
 ### Fonctionnalités
