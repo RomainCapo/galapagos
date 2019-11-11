@@ -1,5 +1,4 @@
 import ply.yacc as yacc
-import os
 from lexer import tokens
 import AST
 
@@ -9,6 +8,7 @@ operations = {
 		'>' : lambda x,y: x>y,
 		'<' : lambda x,y: x<y,
 	}
+
 
 def p_programme_statement(p):
 	'''programme : statement ';' '''
@@ -92,6 +92,9 @@ def p_error(p):
 if not os.path.exists('generated'):
 	os.makedirs('generated')
 
+def parse(program):
+	return yacc.parse(program)
+
 parser = yacc.yacc(outputdir='generated')
 
 if __name__ == "__main__":
@@ -103,7 +106,8 @@ if __name__ == "__main__":
 	if ast:
 		print(ast)
 		graph = ast.makegraphicaltree()
-		name = os.path.splitext(sys.argv[1])[0]+'-ast.pdf'
+		BASE_DIR = "outputs/pdf/"
+		name = BASE_DIR + os.path.splitext(sys.argv[1])[0]+'-ast.pdf'
 		graph.write_pdf(name)
 		print("wrote ast to ", name)
 	else:
