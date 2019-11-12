@@ -119,11 +119,11 @@ Atterrir t;
 
 Si positionX t > 10
 {
-	TournerGauche g 10;
+    TournerGauche g 10;
 };
 
 Tq positionY t < 20
 {
-	Avancer t 10;
+    Avancer t 10;
 };
 ```

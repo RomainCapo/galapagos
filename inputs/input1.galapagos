@@ -4,9 +4,9 @@ b = 20;
 PositionX a;
 
 SI positionX t < b {
-  a = 20;
+    a = 20;
 };
 
 TQ positionY t < b {
-  b = 20;
+    b = 20;
 };

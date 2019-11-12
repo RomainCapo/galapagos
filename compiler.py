@@ -3,10 +3,10 @@ from AST import addToClass
 import parser
 
 operations = {
-	'+' : 'ADD',
-	'-' : 'SUB',
-	'*' : 'MUL',
-	'/' : 'DIV'
+    '+' : 'ADD',
+    '-' : 'SUB',
+    '*' : 'MUL',
+    '/' : 'DIV'
 }
 
 @addToClass(AST.ProgramNode)
@@ -18,11 +18,11 @@ def compile(self):
 
 @addToClass(AST.TokenNode)
 def compile(self):
-	pass
+    pass
 
 @addToClass(AST.OpNode)
 def compile(self):
-	pass
+    pass
 
 @addToClass(AST.AssignNode)
 def compile(self):

@@ -1,25 +1,25 @@
 import ply.lex as lex
 
 reserved_words = (
-	'SI',
-	'TQ',
+    'SI',
+    'TQ',
     'GALAPAGOS',
     'TORTUE',
     'AVANCER',
-	'RECULER',
+    'RECULER',
     'TOURNERGAUCHE',
     'TOURNERDROITE',
     'DECOLLER',
     'ATTERRIR',
-	'POSITIONX',
-	'POSITIONY',
+    'POSITIONX',
+    'POSITIONY',
 )
 
 tokens = (
     'NUMBER',
     'IDENTIFIER',
     'COMMENTS',
-	'COMPARISON_OP',
+    'COMPARISON_OP',
 ) + tuple(map(lambda s:s.upper(), reserved_words))
 
 literals = '();={},'
@@ -30,19 +30,19 @@ def t_NUMBER(t):
     return t
 
 def t_IDENTIFIER(t):
-	r'[a-zA-Z_]\w*'
-	if t.value.upper() in reserved_words:
-		t.type = t.value.upper()
-	return t
+    r'[a-zA-Z_]\w*'
+    if t.value.upper() in reserved_words:
+        t.type = t.value.upper()
+    return t
 
 def t_COMMENTS(t):
-	r'//.*\n'
-	t.lexer.lineno += 1
-	# Pas de retourne car non utilisé par l'analyseur syntaxique
+    r'//.*\n'
+    t.lexer.lineno += 1
+    # Pas de retourne car non utilisé par l'analyseur syntaxique
 
 def t_COMPARISON_OP(t):
-	r'[><]'
-	return t
+    r'[><]'
+    return t
 
 def t_newline(t):
     r'\n+'
