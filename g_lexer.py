@@ -26,6 +26,8 @@ literals = '();={},'
 
 def t_NUMBER(t):
     r'\d+'
+    print("*********")
+    print(t.value)
     t.value = int(t.value)
     return t
 

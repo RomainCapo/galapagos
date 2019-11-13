@@ -47,18 +47,24 @@ def semantic(self):
 @addToClass(AST.AvancerNode)
 def semantic(self):
     print("Avancer node")
-    print(f"\n {self.children[0]}")
-    #hit_cache(self.children[0], self.children)
+    print(f"\n {self.children}")
+    hit_cache(self.children)
 
 @addToClass(AST.ReculerNode)
 def semantic(self):
     print("Reculer node")
     print(f"\n {self.children}")
+    hit_cache(self.children)
 
 @addToClass(AST.DecollerNode)
 def semantic(self):
     print("Decoller node")
     print(f"\n {self.children}")
+    if len(self.children) != 1:
+        raise Exception(f"Error: 'Decoller' does not take properties.")
+    '''else:
+        raise Exception(f"{len(self.children)}")'''
+
 
 @addToClass(AST.AtterrirNode)
 def semantic(self):

@@ -86,6 +86,7 @@ def p_error(p):
     if p:
         print(f"Syntax error in line {p.lineno}")
         parser.errok()
+        raise Exception("Error")
     else:
         print("Sytax error: unexpected end of file!")
 
