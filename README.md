@@ -130,4 +130,4 @@ Tq positionY t < 20
 
 ## TODO
 
-* [.] Raise error when syntax fails
+* [ ] Raise error when syntax fails
