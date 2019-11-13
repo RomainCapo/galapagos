@@ -2,6 +2,21 @@ import AST
 from AST import addToClass
 from g_parser import parse
 
+cache = {}
+
+def assign_cache(d_type, identifier):
+    if identifier not in cache:
+        cache[identifier] = d_type
+    else:
+        raise Exception(f"Error: Redefinition of '{identifier}'.")
+
+def hit_cache(identifiers):
+    for identifier in identifiers:
+        if identifier.tok not in cache:
+            if type(identifier.tok) in [float, int]:
+                continue
+            raise Exception(f"Error: undeclared '{identifier.tok}'.")
+
 def visit_children(children):
     for child in children:
         child.semantic()
@@ -26,11 +41,14 @@ def semantic(self):
 def semantic(self):
     print("Assign node")
     print(f"\n {self.children}")
+    assign_cache(self.children[0].tok[0], self.children[0].tok[1])
+    hit_cache(self.children[1:])
 
 @addToClass(AST.AvancerNode)
 def semantic(self):
     print("Avancer node")
-    print(f"\n {self.children}")
+    print(f"\n {self.children[0]}")
+    #hit_cache(self.children[0], self.children)
 
 @addToClass(AST.ReculerNode)
 def semantic(self):
