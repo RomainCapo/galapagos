@@ -9,9 +9,9 @@ Decoller t;
 Atterrir t;
 
 SI positionX t > 10 {
-    TourneGauche g 10;
+    TournerGauche g 10;
 };
 
 TQ positionY t < 20 {
-    Avance t 10;
+    Avancer t 10;
 };
