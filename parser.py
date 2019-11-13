@@ -108,6 +108,8 @@ if __name__ == "__main__":
         print(ast)
         graph = ast.makegraphicaltree()
         BASE_DIR = "outputs/pdf/"
+        if not os.path.exists("outputs/pdf/"):
+            os.makedirs("outputs/pdf/")
         name = BASE_DIR + os.path.splitext(sys.argv[1])[0]+'-ast.pdf'
         graph.write_pdf(name)
         print("wrote ast to ", name)
