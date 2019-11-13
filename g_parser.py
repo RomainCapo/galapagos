@@ -43,10 +43,11 @@ def p_expression_comp_op(p):
 
 def p_assign(p):
     '''assignation : IDENTIFIER '=' expression
-        | GALAPAGOS IDENTIFIER '=' expression ',' expression ',' expression ',' expression
-        | TORTUE IDENTIFIER '=' expression ',' expression ',' expression ',' expression'''
-    if len(p) == 11:
-        p[0] = AST.AssignNode([AST.TokenNode([p[1], p[2]]), p[4], p[6], p[8], p[10]])
+        | GALAPAGOS IDENTIFIER '=' expression expression expression expression
+        | TORTUE IDENTIFIER '=' expression expression expression expression'''
+    print(len(p))
+    if len(p) == 8:
+        p[0] = AST.AssignNode([AST.TokenNode([p[1], p[2]]), p[4], p[5], p[6], p[7]])
     else:
         p[0] = AST.AssignNode([AST.TokenNode(p[1]), p[3]])
 
