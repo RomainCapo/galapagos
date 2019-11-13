@@ -37,6 +37,7 @@ def p_expression_num_or_var(p):
         | IDENTIFIER'''
     p[0] = AST.TokenNode(p[1])
 
+
 def p_expression_comp_op(p):
     '''expression : expression COMPARISON_OP expression'''
     p[0] = AST.OpNode(p[2], [p[1], p[3]])
