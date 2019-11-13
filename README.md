@@ -127,3 +127,7 @@ Tq positionY t < 20
     Avancer t 10;
 };
 ```
+
+## TODO
+
+* [.] Raise error when syntax fails
