@@ -22,15 +22,43 @@ def assign_cache(d_type, identifier):
     if identifier not in cache:
         cache[identifier] = d_type
     else:
-        raise Exception(f"Error: Redefinition of '{identifier}'.")
+        raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
 
-def hit_cache(identifiers):
-    ''' check if children are variables beforehand declared or integer/float. Else raise an error. '''
-    for identifier in identifiers:
+def hit_cache(identifiers, main_type=None):
+    ''' 
+    Verification if children are variables beforehand declared or an allowed type.
+    Raise an error if not.
+
+    :param list<AST.TokenNode> identifiers: all variables
+    :param string main_type: Type variable
+
+    Example with "Tortue t = g 10 10 0;":
+        identifiers: [g, 10, 10, 0]
+        main_type: Tortue
+    '''
+    print(type(main_type))
+    for i, identifier in enumerate(identifiers):
         if identifier.tok not in cache:
-            if type(identifier.tok) in [float, int]:
+            if type(identifier.tok) in allowed_types[main_type][i]:
                 continue
-            raise Exception(f"Error: undeclared '{identifier.tok}'.")
+            raise Exception(f"Error: declared '{identifier.tok}'. Who is this guy?")
+        else:
+            if cache[identifier.tok] not in allowed_types[main_type][i]:
+                raise Exception(f"Error: declared '{identifier.tok}'. His type is not allowed")
+
+allowed_types = {
+    'Galapagos': [[int, float], [int, float], [int, float], [int, float]],
+    'Tortue': [['Galapagos'], [int, float], [int, float], [int, float]]
+}
+
+def check_types(types, children):
+    ''' 
+    Now that we checked with hit_cache that all our variable are else 
+    '''
+    for i, x in enumerate(children):
+        if type(x.tok) not in allowed_types[types][i]:
+            if cache[x.tok] not in allowed_types[types][i]:
+                raise Exception("Something is wrong. Like you used a wrong type to declar some shit")
 
 def visit_children(children):
     for child in children:
@@ -56,14 +84,14 @@ def semantic(self):
 def semantic(self):
     print("Assign node")
     print(f"\t {self.children}\n")
-    assign_cache(self.children[0].tok[0], self.children[0].tok[1])
-    hit_cache(self.children[1:])
+    assign_cache(self.children[0].tok[0], self.children[0].tok[1]) #example: assign_cache(Tortue, t)
+    hit_cache(self.children[1:], self.children[0].tok[0]) #example: hit_cache([0, 10, 50, 50], Galapagos)
 
 @addToClass(AST.AvancerNode)
 def semantic(self):
     print("Avancer node")
     print(f"\t {self.children}\n")
-    hit_cache(self.children)
+    hit_cache(self.children) #example: hit_cache(['t', 10])
 
 @addToClass(AST.ReculerNode)
 def semantic(self):
