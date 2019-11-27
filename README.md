@@ -9,6 +9,7 @@ Année 2019-2020.
 François Bouthillier de Beaumont, Romain Capocasale, Jonas Freiburghaus
 
 ## Cahier des charges
+
 Le but de projet est de créer un language et de le compiler vers du JavaScript, afin de pouvoir dessiner instictivement sur un canvas HTML. Ainsi, grâce à une syntaxe très lisible, l'utilisateur du langague aurait la possibilité de créer des acteurs, les tortues, et de les déplacer sur le canvas.
 Un acteur (Tortue) a une position X, une position Y et un sens.
 Une tortue fait partie d'une zone (Galapagos) et ne peut en sortir. Elle peut se déplacer en avant et en arrière, et peut tourner sur elle même.
@@ -20,7 +21,7 @@ Le compilateur devra aussi verifier que l'utilisateur n'effectue pas d'opératio
  * Une tortue ne peut sortir de sa zone (Galapagos).
 
 
-Si de tel cas se produise, le compilateur lancera une erreur.
+Si de tel cas se produisent, le compilateur lancera une erreur.
 
 Le langage doit être compilé au travers des étapes suivantes :
 
@@ -51,7 +52,6 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
 * Commentaires uniligne
 * (Evaluation algébrique)
 
-
 ### Mots clés réservés
 
 * **Tortue < nom > = < Galapagos >, < positionX >, < positionY >, < angle >;**
@@ -65,7 +65,7 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
 * **TournerGauche < tortue > < angle >;**
 <br/>Fait tourner la tortue dans le sens antihoraire
 * **TournerDroite < tortue > < angle >;**
-<br/>Fait tourner la tortue dans le sen horaire
+<br/>Fait tourner la tortue dans le sens horaire
 * **Decoller < tortue >;**
 <br/>La Tortue ne dessine plus son tracé derrière elle
 * **Atterrir < tortue >;**
@@ -128,10 +128,15 @@ Tq positionY t < 20
 };
 ```
 
+## Historique des changements
+
+* positionX t -> positionX(t)
+* positionY t -> postionY(t)
+
 ## TODO
 
 * [ ] Raise error when syntax fails
 * [ ] Add ligne error *Kinda done, check method p_error(p) in g_parser.py*
-* [ ] Do we deal with floats ? 
+* [ ] Do we deal with floats ?
   * If yes: _Avancer t 10.2_ should not raise an error_ (not like now)
   * If no: _Avancer t 10. should raise an error_ (not like now)

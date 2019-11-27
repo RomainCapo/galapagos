@@ -4,7 +4,7 @@ from g_parser import parse
 
 '''
 DEV note:
-Pour l'instant, le correct nombre de d'arguments est géré dans g_parser.py (la méthode p_error(p)). 
+Pour l'instant, le correct nombre de d'arguments est géré dans g_parser.py (la méthode p_error(p)).
 Cette méthode est call par exemple quand qqn écrit "Decoller t 12" (ce qui est faux).
 Si, après discussion, nous voudrions gérer ces erreurs de nombre d'args ici, on utiliserait qqch comme ceci, par exemple:
 
@@ -124,12 +124,16 @@ def semantic(self):
 @addToClass(AST.PositionXNode)
 def semantic(self):
     print("Position x node")
-    print(f"\t {self.children}\n")
+    print(f"\n {self.children}")
+    print(f"---{self}----")
+    hit_cache(self.children[0])
 
 @addToClass(AST.PositionYNode)
 def semantic(self):
     print("Position y node")
-    print(f"\t {self.children}\n")
+    print(f"\n {self.children}")
+    print(f"---{self}----")
+    hit_cache(self.children[0])
 
 @addToClass(AST.TqNode)
 def semantic(self):
