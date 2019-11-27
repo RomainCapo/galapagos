@@ -25,7 +25,7 @@ def assign_cache(d_type, identifier):
         raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
 
 def hit_cache(identifiers, main_type=None):
-    ''' 
+    '''
     Verification if children are variables beforehand declared or an allowed type.
     Raise an error if not.
 
@@ -48,12 +48,18 @@ def hit_cache(identifiers, main_type=None):
 
 allowed_types = {
     'Galapagos': [[int, float], [int, float], [int, float], [int, float]],
-    'Tortue': [['Galapagos'], [int, float], [int, float], [int, float]]
+    'Tortue': [['Galapagos'], [int, float], [int, float], [int, float]],
+    'Avancer': [['Tortue'], [int, float]],
+    'Reculer': [['Tortue'], [int, float]],
+    'TournerGauche': [['Tortue'], [int, float]],
+    'TournerDroite': [['Tortue'], [int, float]],
+    'Decoller':  [['Tortue']],
+    'Atterrir': [['Tortue']],
 }
 
 def check_types(types, children):
-    ''' 
-    Now that we checked with hit_cache that all our variable are else 
+    '''
+    Now that we checked with hit_cache that all our variable are else
     '''
     for i, x in enumerate(children):
         if type(x.tok) not in allowed_types[types][i]:
