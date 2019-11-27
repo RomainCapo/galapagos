@@ -43,13 +43,13 @@ def p_expression_comp_op(p):
     p[0] = AST.OpNode(p[2], [p[1], p[3]])
 
 def p_assign(p):
-    '''assignation : IDENTIFIER '=' expression
+    '''assignation : ENTIER IDENTIFIER '=' expression
         | GALAPAGOS IDENTIFIER '=' expression expression expression expression
         | TORTUE IDENTIFIER '=' expression expression expression expression'''
     if len(p) == 8:
         p[0] = AST.AssignNode([AST.TokenNode([p[1], p[2]]), p[4], p[5], p[6], p[7]])
     else:
-        p[0] = AST.AssignNode([AST.TokenNode(p[1]), p[3]])
+        p[0] = AST.AssignNode([AST.TokenNode([p[1], p[2]]), p[4]])
 
 def p_statement_avancer(p):
     '''statement : AVANCER expression expression'''
@@ -77,6 +77,7 @@ def p_statement_atterrir(p):
 
 def p_statement_position_x(p):
     '''statement : POSITIONX expression'''
+    print(p[:])
     p[0] = AST.PositionXNode(p[2])
 
 def p_statement_position_y(p):

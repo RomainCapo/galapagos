@@ -5,6 +5,7 @@ reserved_words = (
     'TQ',
     'GALAPAGOS',
     'TORTUE',
+    'ENTIER',
     'AVANCER',
     'RECULER',
     'TOURNERGAUCHE',
@@ -20,6 +21,8 @@ tokens = (
     'IDENTIFIER',
     'COMMENTS',
     'COMPARISON_OP',
+    'ADD_OP',
+    'MUL_OP'
 ) + tuple(map(lambda s:s.upper(), reserved_words))
 
 literals = '();={},'
@@ -43,6 +46,13 @@ def t_COMMENTS(t):
 def t_COMPARISON_OP(t):
     r'[><]'
     return t
+
+def t_ADD_OP(t):
+	r'[+-]'
+	return t
+	
+def t_MUL_OP(t):
+	r'[*/]'
 
 def t_newline(t):
     r'\n+'

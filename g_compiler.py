@@ -16,21 +16,21 @@ def compile(self):
 @addToClass(AST.OpNode)
 def compile(self):
     print(self.children)
+    #return self.children[0].compile() + str(self.op) + self.children[1].compile()
 
 @addToClass(AST.AssignNode)
 def compile(self):
     js_code = ""
 
-    if len(self.children) == 2:
-        js_code += "let {0} = {1};\n".format(self.children[0].compile(), self.children[1].compile())
-    else:
-        var_type = self.children[0].tok[0]
-        var_name = self.children[0].tok[1]
+    var_type = self.children[0].tok[0]
+    var_name = self.children[0].tok[1]
 
-        if var_type == "Tortue":
-            js_code += "let {0} = new Turtle(context, {1}, {2}, {3}, {4});\n".format(var_name, self.children[1].compile(), self.children[2].compile(), self.children[3].compile(), self.children[4].compile())
-        elif var_type == "Galapagos":
-            js_code += "let {0} = new Galapagos(context, {1}, {2}, {3}, {4});\n".format(var_name, self.children[1].compile(), self.children[2].compile(), self.children[3].compile(), self.children[4].compile())
+    if var_type == "Tortue":
+        js_code += "let {0} = new Turtle(context, {1}, {2}, {3}, {4});\n".format(var_name, self.children[1].compile(), self.children[2].compile(), self.children[3].compile(), self.children[4].compile())
+    elif var_type == "Galapagos":
+        js_code += "let {0} = new Galapagos(context, {1}, {2}, {3}, {4});\n".format(var_name, self.children[1].compile(), self.children[2].compile(), self.children[3].compile(), self.children[4].compile())
+    elif var_type == "Entier":
+        js_code += "let {0} = {1};\n".format(var_name, self.children[1].compile())
 
     return js_code
 

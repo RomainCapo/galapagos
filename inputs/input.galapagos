@@ -8,10 +8,10 @@ TournerDroite t 30;
 Decoller t;
 Atterrir t;
 
-SI positionX t > 10 {
-    TournerGauche g 10;
+Entier a = 10;
+
+Si a < 10
+{
+	Atterrir t;
 };
 
-TQ positionY t < 20 {
-    Avancer t 10;
-};
