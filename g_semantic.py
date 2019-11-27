@@ -36,15 +36,14 @@ def hit_cache(identifiers, main_type=None):
         identifiers: [g, 10, 10, 0]
         main_type: Tortue
     '''
-    print(type(main_type))
     for i, identifier in enumerate(identifiers):
         if identifier.tok not in cache:
             if type(identifier.tok) in allowed_types[main_type][i]:
                 continue
-            raise Exception(f"Error: declared '{identifier.tok}'. Who is this guy?")
+            raise Exception(f"Error: '{identifier.tok}' is not an allowed type here.")
         else:
             if cache[identifier.tok] not in allowed_types[main_type][i]:
-                raise Exception(f"Error: declared '{identifier.tok}'. His type is not allowed")
+                raise Exception(f"Error: declared '{identifier.tok}'. His type is not allowed here")
 
 allowed_types = {
     'Galapagos': [[int, float], [int, float], [int, float], [int, float]],
