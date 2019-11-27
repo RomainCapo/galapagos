@@ -10,8 +10,6 @@ Atterrir t;
 
 Entier a = 10;
 
-Si a < 10
-{
-	Atterrir t;
+Tq PositionX(t) > 20{
+    Decoller t;
 };
-

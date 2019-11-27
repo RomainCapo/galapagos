@@ -6,7 +6,7 @@ from g_parser import parse
 def compile(self):
     js_code = ""
     for c in self.children:
-        js_code += c.compile()
+        js_code += c.compile() + ";\n"
     return js_code
 
 @addToClass(AST.TokenNode)
@@ -15,8 +15,8 @@ def compile(self):
 
 @addToClass(AST.OpNode)
 def compile(self):
-    print(self.children)
-    #return self.children[0].compile() + str(self.op) + self.children[1].compile()
+
+    return "{0} {1} {2}".format(self.children[0].compile(), self.op, self.children[1].compile())
 
 @addToClass(AST.AssignNode)
 def compile(self):
@@ -26,59 +26,63 @@ def compile(self):
     var_name = self.children[0].tok[1]
 
     if var_type == "Tortue":
-        js_code += "let {0} = new Turtle(context, {1}, {2}, {3}, {4});\n".format(var_name, self.children[1].compile(), self.children[2].compile(), self.children[3].compile(), self.children[4].compile())
+        js_code += "let {0} = new Turtle(context, {1}, {2}, {3}, {4})".format(var_name, self.children[1].compile(), self.children[2].compile(), self.children[3].compile(), self.children[4].compile())
     elif var_type == "Galapagos":
-        js_code += "let {0} = new Galapagos(context, {1}, {2}, {3}, {4});\n".format(var_name, self.children[1].compile(), self.children[2].compile(), self.children[3].compile(), self.children[4].compile())
+        js_code += "let {0} = new Galapagos(context, {1}, {2}, {3}, {4})".format(var_name, self.children[1].compile(), self.children[2].compile(), self.children[3].compile(), self.children[4].compile())
     elif var_type == "Entier":
-        js_code += "let {0} = {1};\n".format(var_name, self.children[1].compile())
+        js_code += "let {0} = {1}".format(var_name, self.children[1].compile())
 
     return js_code
 
 @addToClass(AST.AvancerNode)
 def compile(self):
-    return "{0}.moveStraight({1});\n".format(self.children[0].compile(), self.children[1].compile())
+    return "{0}.moveStraight({1})".format(self.children[0].compile(), self.children[1].compile())
 
 @addToClass(AST.ReculerNode)
 def compile(self):
-    return "{0}.moveBack({1});\n".format(self.children[0].compile(), self.children[1].compile())
+    return "{0}.moveBack({1})".format(self.children[0].compile(), self.children[1].compile())
 
 @addToClass(AST.DecollerNode)
 def compile(self):
-    return "{0}.takeOff();\n".format(self.children[0].compile())
+    return "{0}.takeOff()".format(self.children[0].compile())
 
 @addToClass(AST.AtterrirNode)
 def compile(self):
-    return "{0}.landing();\n".format(self.children[0].compile())
+    return "{0}.landing()".format(self.children[0].compile())
 
 @addToClass(AST.TournerGaucheNode)
 def compile(self):
-    return "{0}.turnLeft({1});\n".format(self.children[0].compile(), self.children[1].compile())
+    return "{0}.turnLeft({1})".format(self.children[0].compile(), self.children[1].compile())
 
 @addToClass(AST.TournerDroiteNode)
 def compile(self):
-    return "{0}.turnRight({1});\n".format(self.children[0].compile(), self.children[1].compile())
+    return "{0}.turnRight({1})".format(self.children[0].compile(), self.children[1].compile())
 
 @addToClass(AST.PositionXNode)
 def compile(self):
-    return "{0}.getPosX();\n".format(self.children[0].compile())
+    return "{0}.getPosX()".format(self.children[0].compile())
 
 @addToClass(AST.PositionYNode)
 def compile(self):
-    return "{0}.getPosY();\n".format(self.children[0].compile())
+    return "{0}.getPosY()".format(self.children[0].compile())
 
 @addToClass(AST.SiNode)
 def compile(self):
     js_code = ""
-    self.children[0].compile()
-    js_code += "if() {\n"
+    js_code += "if({0})".format(self.children[0].compile())
+    js_code += "{\n"
     js_code += "\t" + self.children[1].compile()
-    js_code += "}\n"
+    js_code += "}"
     return js_code
 
 @addToClass(AST.TqNode)
 def compile(self):
     js_code = ""
-    pass
+    js_code += "while({0})".format(self.children[0].compile())
+    js_code += "{\n"
+    js_code += "\t" + self.children[1].compile()
+    js_code += "}"
+    return js_code
 
 
 
