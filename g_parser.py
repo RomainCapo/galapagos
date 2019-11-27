@@ -24,6 +24,13 @@ def p_statement(p):
         | structure'''
     p[0] = p[1]
 
+"""
+def p_number_statement(p):
+    '''expression : number_statement'''
+    print(p[1])
+    p[0] = AST.TokenNode(p[1])
+"""
+
 def p_tq_structure(p):
     '''structure : TQ expression '{' programme '}' '''
     p[0] = AST.TqNode([p[2], p[4]])
@@ -32,15 +39,15 @@ def p_si_structure(p):
     '''structure : SI expression '{' programme '}' '''
     p[0] = AST.SiNode([p[2], p[4]])
 
+def p_expression_comp_op(p):
+    '''expression : expression COMPARISON_OP expression'''
+    print(p[:])
+    p[0] = AST.OpNode(p[2], [p[1], p[3]])
+
 def p_expression_num_or_var(p):
     '''expression : NUMBER
         | IDENTIFIER'''
     p[0] = AST.TokenNode(p[1])
-
-
-def p_expression_comp_op(p):
-    '''expression : expression COMPARISON_OP expression'''
-    p[0] = AST.OpNode(p[2], [p[1], p[3]])
 
 def p_assign(p):
     '''assignation : IDENTIFIER '=' expression
@@ -76,12 +83,12 @@ def p_statement_atterrir(p):
     p[0] = AST.AtterrirNode(p[2])
 
 def p_statement_position_x(p):
-    '''statement : POSITIONX expression'''
-    p[0] = AST.PositionXNode(p[2])
+    '''expression : POSITIONX '(' expression ')' '''
+    p[0] = AST.PositionXNode(p[3])
 
 def p_statement_position_y(p):
-    '''statement : POSITIONY expression'''
-    p[0] = AST.PositionYNode(p[2])
+    '''expression : POSITIONY '(' expression ')' '''
+    p[0] = AST.PositionYNode(p[3])
 
 def p_error(p):
     if p:
