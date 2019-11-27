@@ -79,11 +79,15 @@ def semantic(self):
 def semantic(self):
     print("Position x node")
     print(f"\n {self.children}")
+    print(f"---{self}----")
+    hit_cache(self.children[0])
 
 @addToClass(AST.PositionYNode)
 def semantic(self):
     print("Position y node")
     print(f"\n {self.children}")
+    print(f"---{self}----")
+    hit_cache(self.children[0])
 
 @addToClass(AST.TqNode)
 def semantic(self):

@@ -34,7 +34,8 @@ def p_si_structure(p):
 
 def p_expression_num_or_var(p):
     '''expression : NUMBER
-        | IDENTIFIER'''
+        | IDENTIFIER
+        | number_statement'''
     p[0] = AST.TokenNode(p[1])
 
 def p_expression_comp_op(p):
@@ -75,11 +76,11 @@ def p_statement_atterrir(p):
     p[0] = AST.AtterrirNode(p[2])
 
 def p_statement_position_x(p):
-    '''statement : POSITIONX expression'''
+    '''number_statement : POSITIONX expression'''
     p[0] = AST.PositionXNode(p[2])
 
 def p_statement_position_y(p):
-    '''statement : POSITIONY expression'''
+    '''number_statement : POSITIONY expression'''
     p[0] = AST.PositionYNode(p[2])
 
 def p_error(p):
