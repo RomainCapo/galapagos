@@ -4,6 +4,6 @@ Tortue t = g 10 10 0; // Cree une tortue dans la zone g
 Avancer t 10;
 Reculer t 10;
 TournerGauche t 10;
-TournerDroite t 30;
+TournerDroite t 10;
 Decoller t;
 Atterrir t;
