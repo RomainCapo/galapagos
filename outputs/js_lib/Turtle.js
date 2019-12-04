@@ -9,22 +9,27 @@ class Turtle
     this.posY = this.galapagos.posY + startPosY;
     this.angle = this._degToRad(-startAngle);
     this.isGrounded = true;
-    this._drawTurtlePos();
   }
 
   _drawTurtlePos()
   {
-    this.context.fillRect(this.posX, this.posY, 3 , 3);
+	let drawing = new Image();
+	drawing.src = "js_lib/turtle.png";
+	drawing.onload = () => {
+	context.drawImage(drawing,this.posX-15,this.posY-15);
+	}
   }
 
   turnRight(angle)
   {
     this.angle += this._degToRad(-angle);
+	this._drawTurtlePos();
   }
 
   turnLeft(angle)
   {
     this.angle -= this._degToRad(-angle);
+	this._drawTurtlePos();
   }
 
   takeOff()
@@ -49,11 +54,13 @@ class Turtle
     {
     this.context.stroke()
     }
+	this._drawTurtlePos();
   }
 
   moveBack(distance)
   {
     this.moveStraight(-distance);
+	this._drawTurtlePos();
   }
 
   getPosX()
@@ -71,4 +78,4 @@ class Turtle
     return deg * (Math.PI/180);
   }
 
-}
+ }
