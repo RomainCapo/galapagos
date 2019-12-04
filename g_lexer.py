@@ -19,7 +19,7 @@ tokens = (
     'NUMBER',
     'IDENTIFIER',
     'COMMENTS',
-    'COMPARISON_OP',
+    'ALGEBRAIC_OP',
 ) + tuple(map(lambda s:s.upper(), reserved_words))
 
 literals = '();={},'
@@ -40,8 +40,8 @@ def t_COMMENTS(t):
     t.lexer.lineno += 1
     # Pas de retourne car non utilisé par l'analyseur syntaxique
 
-def t_COMPARISON_OP(t):
-    r'[><]'
+def t_ALGEBRAIC_OP(t):
+    r'[><+\-*/]'
     return t
 
 def t_newline(t):
@@ -59,7 +59,7 @@ lex.lex()
 if __name__ == "__main__":
     import sys
 
-    prog = open("inputs/" + sys.argv[1]).read()
+    prog = open(sys.argv[1]).read()
 
     lex.input(prog)
 
