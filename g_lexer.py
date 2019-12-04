@@ -5,6 +5,7 @@ reserved_words = (
     'TQ',
     'GALAPAGOS',
     'TORTUE',
+    'ENTIER',
     'AVANCER',
     'RECULER',
     'TOURNERGAUCHE',
@@ -20,6 +21,8 @@ tokens = (
     'IDENTIFIER',
     'COMMENTS',
     'COMPARISON_OP',
+    'ADD_OP',
+    'MUL_OP'
 ) + tuple(map(lambda s:s.upper(), reserved_words))
 
 literals = '();={},'
@@ -44,6 +47,13 @@ def t_COMPARISON_OP(t):
     r'[><]'
     return t
 
+def t_ADD_OP(t):
+	r'[+-]'
+	return t
+	
+def t_MUL_OP(t):
+	r'[*/]'
+
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
@@ -55,15 +65,3 @@ def t_error(t):
 t_ignore = ' \t'
 
 lex.lex()
-
-if __name__ == "__main__":
-    import sys
-
-    prog = open("inputs/" + sys.argv[1]).read()
-
-    lex.input(prog)
-
-    while 1:
-        tok = lex.token()
-        if not tok: break
-        print("line %d: %s(%s)" % (tok.lineno, tok.type, tok.value))
