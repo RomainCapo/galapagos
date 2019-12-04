@@ -4,6 +4,8 @@
 
 generated/
 *.pdf
+outputs/compiled_code.js
+inputs/*.galapagos
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

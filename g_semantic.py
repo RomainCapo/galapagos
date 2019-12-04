@@ -24,14 +24,15 @@ def assign_cache(d_type, identifier):
         raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
 
 allowed_types = {
-    'Galapagos': [[int, float], [int, float], [int, float], [int, float]],
-    'Tortue': [['Galapagos'], [int, float], [int, float], [int, float]],
-    'Avancer': [['Tortue'], [int, float]],
-    'Reculer': [['Tortue'], [int, float]],
-    'TournerGauche': [['Tortue'], [int, float]],
-    'TournerDroite': [['Tortue'], [int, float]],
+    'Galapagos': [[int, float, 'Entier'], [int, float, 'Entier'], [int, float, 'Entier'], [int, float, 'Entier']],
+    'Tortue': [['Galapagos'], [int, float, 'Entier'], [int, float, 'Entier'], [int, float, 'Entier']],
+    'Avancer': [['Tortue'], [int, float, 'Entier']],
+    'Reculer': [['Tortue'], [int, float, 'Entier']],
+    'TournerGauche': [['Tortue'], [int, float, 'Entier']],
+    'TournerDroite': [['Tortue'], [int, float, 'Entier']],
     'Decoller':  [['Tortue']],
     'Atterrir': [['Tortue']],
+    'Entier': [[int, float]]
 }
 
 def check_type(identifiers, main_type):
@@ -47,6 +48,7 @@ def check_type(identifiers, main_type):
         identifiers: [g, 10, 10, 0]
         main_type: Tortue
     '''
+
     for i, identifier in enumerate(identifiers):
         if identifier.tok not in cache:
             if type(identifier.tok) not in allowed_types[main_type][i]:
