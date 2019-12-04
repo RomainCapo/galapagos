@@ -10,8 +10,6 @@ class Turtle
     this.angle = this._degToRad(-startAngle);
     this.isGrounded = true;
   }
-  
-  _loadImage()
 
   _drawTurtlePos()
   {
