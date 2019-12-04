@@ -37,27 +37,27 @@ def compile(self):
 
 @addToClass(AST.AvancerNode)
 def compile(self):
-    return "{0}.moveStraight({1})".format(self.children[0].compile(), self.children[1].compile())
+    return "animator.addToAnimationStack({0}.moveStraight.bind({0}), {1})".format(self.children[0].compile(), self.children[1].compile())
 
 @addToClass(AST.ReculerNode)
 def compile(self):
-    return "{0}.moveBack({1})".format(self.children[0].compile(), self.children[1].compile())
+    return "animator.addToAnimationStack({0}.moveBack.bind({0}), {1})".format(self.children[0].compile(), self.children[1].compile())
 
 @addToClass(AST.DecollerNode)
 def compile(self):
-    return "{0}.takeOff()".format(self.children[0].compile())
+    return "animator.addToAnimationStack({0}.takeOff.bind({0}), null)".format(self.children[0].compile())
 
 @addToClass(AST.AtterrirNode)
 def compile(self):
-    return "{0}.landing()".format(self.children[0].compile())
+    return "animator.addToAnimationStack({0}.landing.bind({0}), null)".format(self.children[0].compile())
 
 @addToClass(AST.TournerGaucheNode)
 def compile(self):
-    return "{0}.turnLeft({1})".format(self.children[0].compile(), self.children[1].compile())
+    return "animator.addToAnimationStack({0}.turnLeft.bind({0}), {1})".format(self.children[0].compile(), self.children[1].compile())
 
 @addToClass(AST.TournerDroiteNode)
 def compile(self):
-    return "{0}.turnRight({1})".format(self.children[0].compile(), self.children[1].compile())
+    return "animator.addToAnimationStack({0}.turnRight.bind({0}), {1})".format(self.children[0].compile(), self.children[1].compile())
 
 @addToClass(AST.PositionXNode)
 def compile(self):
@@ -110,8 +110,10 @@ if __name__ == "__main__":
     print("## SEMANTIC: end - success\n")
 
     compiled = "let context = document.getElementById('canvas').getContext('2d');\n"
+    compiled += "let animator = new Animator();\n"
     print("\n## COMPILER: start\n")
     compiled += ast.compile()
+    compiled += "animator.animate(null);"
     print(compiled) if DEBUG else 0
     print("## COMPILER: end - success")
 

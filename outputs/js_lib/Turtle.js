@@ -9,14 +9,18 @@ class Turtle
     this.posY = this.galapagos.posY + startPosY;
     this.angle = this._degToRad(-startAngle);
     this.isGrounded = true;
+	this.turtleImage = 
   }
+  
+  _loadImage()
 
   _drawTurtlePos()
   {
 	let drawing = new Image();
 	drawing.src = "js_lib/turtle.png";
 	drawing.onload = () => {
-	context.drawImage(drawing,this.posX-15,this.posY-5);
+	context.drawImage(drawing,this.posX-15,this.posY-15);
+	}
   }
 
   turnRight(angle)
@@ -77,4 +81,4 @@ class Turtle
     return deg * (Math.PI/180);
   }
 
-}
+ }

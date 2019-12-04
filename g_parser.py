@@ -6,10 +6,11 @@ import os
 vars = {}
 
 operations = {
-        '>' : lambda x,y: x>y,
-        '<' : lambda x,y: x<y,
+        '>' : lambda x, y: x > y,
+        '<' : lambda x, y: x < y,
+        '+' : lambda x, y: x + y,
+        '-' : lambda x, y: x - y,
     }
-
 
 def p_programme_statement(p):
     '''programme : statement ';' '''
@@ -32,9 +33,8 @@ def p_si_structure(p):
     '''structure : SI expression '{' programme '}' '''
     p[0] = AST.SiNode([p[2], p[4]])
 
-def p_expression_comp_op(p):
-    '''expression : expression COMPARISON_OP expression'''
-    print(p[:])
+def p_expression_algebric_op(p):
+    '''expression : expression ALGEBRAIC_OP expression'''
     p[0] = AST.OpNode(p[2], [p[1], p[3]])
 
 def p_expression_num_or_var(p):
@@ -88,9 +88,9 @@ def p_error(p):
     if p:
         print(f"Syntax error in line {p.lineno}")
         parser.errok()
-        raise Exception(f"Error in line {p.lineno}: Incorrect {p.type}: '{p.value}'.\nMaybe you should check the number of arguments you wrote, or maybe it's something else, idk...")
+        raise Exception(f'''\n\nError in line {p.lineno}: Incorrect {p.type}: '{p.value}'.\nMaybe you should check the number of arguments you wrote, or maybe you forgot to end with ';', or maybe it's something else, idk...''')
     else:
-        print("Sytax error: unexpected end of file!")
+        raise Exception(f"\nSyntax error: unexpected end of file!")
 
 if not os.path.exists('generated'):
     os.makedirs('generated')
