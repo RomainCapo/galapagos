@@ -99,19 +99,3 @@ def parse(program):
     return yacc.parse(program)
 
 parser = yacc.yacc(outputdir='generated')
-
-if __name__ == "__main__":
-    import sys
-
-    prog = open("inputs/" + sys.argv[1]).read()
-
-    ast = yacc.parse(prog)
-    if ast:
-        print(ast)
-        graph = ast.makegraphicaltree()
-        BASE_DIR = "outputs/pdf/"
-        name = BASE_DIR + os.path.splitext(sys.argv[1])[0]+'-ast.pdf'
-        graph.write_pdf(name)
-        print("wrote ast to ", name)
-    else:
-        print ("Parsing returned no result!")
