@@ -9,7 +9,6 @@ class Turtle
     this.posY = this.galapagos.posY + startPosY;
     this.angle = this._degToRad(-startAngle);
     this.isGrounded = true;
-	this.turtleImage = 
   }
   
   _loadImage()
