@@ -1,4 +1,5 @@
 let context = document.getElementById('canvas').getContext('2d');
+
 let animator = new Animator();
 let g = new Galapagos(context, 0, 10, 500, 500);
 let t = new Turtle(context, g, 10, 10, 0);
