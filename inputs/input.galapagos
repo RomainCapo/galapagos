@@ -8,11 +8,10 @@ TournerDroite t 30;
 Decoller t;
 Atterrir t;
 
-a = PositionX(t);
+Entier a = 10;
 
 Si POSITIONX(t) > 20 + 10 {
     Si PositionY(t) > 10 {
         Decoller t;
     };
     Atterrir t;
-};
