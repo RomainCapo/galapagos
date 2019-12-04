@@ -49,8 +49,8 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
 * Branchement
 * Boucle
 * Fonctions préfaites
-* Commentaires uniligne
-* (Evaluation algébrique)
+* Commentaire uniligne
+* Evaluation algébrique
 
 ### Mots clés réservés
 
@@ -70,28 +70,37 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
 <br/>La Tortue ne dessine plus son tracé derrière elle
 * **Atterrir < tortue >;**
 <br/>La Tortue dessine le tracé derrière elle
-* **Si < condition > { < instruction > }**
-<br/><instruction> est executé uniquement si <condition> est satisfait
-* **Tq < condition > { < instruction > }**
-<br/><instruction> est executé tant que <condition> est satisfait
+* **Si < condition > { < programme > }**
+<br/><programme> est executé uniquement si <condition> est satisfait
+* **Tq < condition > { < programme > }**
+<br/><programme> est executé tant que <condition> est satisfait
 * **positionX < tortue >**
 <br/>Retourne la position actuelle de la tortue sur l'axe X
 * **positionY < tortue >**
 <br/>Retourne la position actuelle de la tortue sur l'axe Y
-* **§§ < texte >**
+* **// < texte >**
 <br/>Commentaire
 
 ### Gramaire
 
-* **expression : NUMBER | IDENTIFIER**
-* **expression : expression COMPARISON_OP expression**
-* **assignation : IDENTIFIER '=' expression
-  | GALAPAGOS IDENTIFIER '=' expression ',' expression ',' expression ',' expression
-  | TORTUE IDENTIFIER '=' expression ',' expression ',' expression ',' expression**
+* **programme : statement ';' **
 * **programme : statement ';' programme**
-* **programme : statement ';'**
-* **structure : TQ expression '{' programme '}'**
 * **statement : assignation | structure**
+* **structure : TQ expression '{' programme '}'**
+* **structure : SI expression '{' programme '}'**
+* **expression : expression ALGEBRAIC_OP expression**
+* **expression : NUMBER | IDENTIFIER**
+* **assignation : ENTIER IDENTIFIER '=' expression
+        | GALAPAGOS IDENTIFIER '=' expression expression expression expression
+        | TORTUE IDENTIFIER '=' expression expression expression expression**
+* **statement : AVANCER expression expression**
+* **statement : RECULER expression expression**
+* **statement : TOURNERGAUCHE expression expression**
+* **statement : TOURNERDROITE expression expression**
+* **statement : DECOLLER expression**
+* **statement : ATTERRIR expression**
+* **expression : POSITIONX '(' expression ')'**
+* **expression : POSITIONY '(' expression ')'**
 
 ### Conventions
 
@@ -107,8 +116,8 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
 ### Exemple de script
 
 ```galapagos
-Galapagos g = 0, 10, 50, 50;  §§ Definis une zone pour une tortue
-Tortue t = g, 10,10, 0; §§ Cree une tortue dans la zone g
+Galapagos g = 0, 10, 50, 50;  // Definis une zone pour une tortue
+Tortue t = g, 10,10, 0; // Cree une tortue dans la zone g
 
 Avancer t 10;
 Reculer t 10;
@@ -117,12 +126,12 @@ TournerDroite t 30;
 Decoller t;
 Atterrir t;
 
-Si positionX t > 10
+Si positionX(t) > 10
 {
     TournerGauche g 10;
 };
 
-Tq positionY t < 20
+Tq positionY(t) < 20
 {
     Avancer t 10;
 };
