@@ -10,6 +10,3 @@ Atterrir t;
 
 Entier a = 10; //zeiufkjw
 
-Tq PositionX(t) > 20 {
-	Atterrir t;
-};

@@ -1,6 +1,7 @@
 import AST 
 from AST import addToClass
 from g_parser import parse
+from g_semantic import semantic
 
 @addToClass(AST.ProgramNode)
 def compile(self):
@@ -88,16 +89,36 @@ def compile(self):
 
 if __name__ == "__main__":
     import sys, os
+
+    DEBUG = True if len(sys.argv) == 3 and sys.argv[2].upper() == 'DEBUG' else False
+    BASE_DIR = "outputs/pdf/"
+
     prog = open(sys.argv[1]).read()
+    print("\n## PARSING: start")
     ast = parse(prog)
-    print(ast)
+
+    graph = ast.makegraphicaltree()
+    
+    path_name = BASE_DIR + os.path.splitext(sys.argv[1])[0].split("/")[-1] + '-ast.pdf'
+    graph.write_pdf(path_name)
+    print("\n"+str(ast)) if DEBUG else 0
+    print("\n## PARSING: end - success")
+    print("\twrote ast to", path_name)
+
+    print("\n## SEMANTIC: start\n")
+    ast.semantic(DEBUG)
+    print("## SEMANTIC: end - success\n")
+
     compiled = "let context = document.getElementById('canvas').getContext('2d');\n"
+    print("\n## COMPILER: start\n")
     compiled += ast.compile()
+    print(compiled) if DEBUG else 0
+    print("## COMPILER: end - success")
 
     BASE_OUTPUT_DIR = "outputs/"
     OUTPUT_FILENAME = "compiled_code.js"
-    name = BASE_OUTPUT_DIR + OUTPUT_FILENAME    
+    name = BASE_OUTPUT_DIR + OUTPUT_FILENAME
     outfile = open(name, 'w')
     outfile.write(compiled)
     outfile.close()
-    print ("Wrote output to", name)
+    print ("\tWrote code to", name)

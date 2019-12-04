@@ -1,6 +1,5 @@
 import AST
 from AST import addToClass
-from g_parser import parse
 
 '''
 DEV note:
@@ -58,98 +57,75 @@ def check_type(identifiers, main_type):
                 raise Exception(f"\n\tInstruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
                     f"\n\t'{identifier.tok}' ({cache[identifier.tok]}) given.")
 
-def visit_children(children):
+def visit_children(children, DEBUG=False):
     for child in children:
-        child.semantic()
+        child.semantic(DEBUG=DEBUG)
 
 @addToClass(AST.ProgramNode)
-def semantic(self):
-    print("Program node")
-    print(f"\t {self.children}\n")
-    visit_children(self.children)
+def semantic(self, DEBUG=False):
+    print(f"Program node\n\t {self.children}\n") if DEBUG else 0
+    visit_children(self.children, DEBUG=DEBUG)
 
 @addToClass(AST.TokenNode)
-def semantic(self):
-    print("Token node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Token node\n\t {self.children}\n") if DEBUG else 0
 
 @addToClass(AST.OpNode)
-def semantic(self):
-    print("Op node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Op node\n\t {self.children}\n") if DEBUG else 0
 
 @addToClass(AST.AssignNode)
-def semantic(self):
-    print("Assign node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Assign node\n\t {self.children}\n") if DEBUG else 0
     assign_cache(self.children[0].tok[0], self.children[0].tok[1]) #example: assign_cache(Tortue, t)
     check_type(self.children[1:], self.children[0].tok[0]) #example: check_type([0, 10, 50, 50], Galapagos)
 
 @addToClass(AST.AvancerNode)
-def semantic(self):
-    print("Avancer node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Avancer node\n\t {self.children}\n") if DEBUG else 0
     check_type(self.children, 'Avancer') #example: check_type(['t', 10])
 
 @addToClass(AST.ReculerNode)
-def semantic(self):
-    print("Reculer node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Reculer node\n\t {self.children}\n") if DEBUG else 0
     check_type(self.children, 'Reculer')
 
 @addToClass(AST.DecollerNode)
-def semantic(self):
-    print("Decoller node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Decoller node\n\t {self.children}\n") if DEBUG else 0
     check_type(self.children, 'Decoller')
 
 @addToClass(AST.AtterrirNode)
-def semantic(self):
-    print("Atterrir node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Atterrir node\n\t {self.children}\n") if DEBUG else 0
     check_type(self.children, 'Atterrir')
 
 @addToClass(AST.TournerGaucheNode)
-def semantic(self):
-    print("Tourner gauche node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Tourner gauche node\n\t {self.children}\n") if DEBUG else 0
     check_type(self.children, 'TournerGauche')
 
 @addToClass(AST.TournerDroiteNode)
-def semantic(self):
-    print("Tourner droite node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Tourner droite node\n\t {self.children}\n") if DEBUG else 0
     check_type(self.children, 'TournerDroite')
 
 @addToClass(AST.PositionXNode)
-def semantic(self):
-    print("Position x node")
-    print(f"\n {self.children}")
-    print(f"---{self}----")
+def semantic(self, DEBUG=False):
+    print(f"Position x node\n\t {self.children}") if DEBUG else 0
     check_type(self.children[0])
 
 @addToClass(AST.PositionYNode)
-def semantic(self):
-    print("Position y node")
-    print(f"\n {self.children}")
-    print(f"---{self}----")
+def semantic(self, DEBUG=False):
+    print(f"Position y node\n\t {self.children}") if DEBUG else 0
     check_type(self.children[0])
 
 @addToClass(AST.TqNode)
-def semantic(self):
-    print("Tq node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Tq node\n\t {self.children}\n") if DEBUG else 0
     visit_children(self.children)
 
 @addToClass(AST.SiNode)
-def semantic(self):
-    print("Si node")
-    print(f"\t {self.children}\n")
+def semantic(self, DEBUG=False):
+    print(f"Si node\n\t {self.children}\n") if DEBUG else 0
     visit_children(self.children)
-
-if __name__ == "__main__":
-    import sys, os
-    prog = open("inputs/" + sys.argv[1]).read()
-    ast = parse(prog)
-
-    ast.semantic()
