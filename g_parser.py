@@ -24,13 +24,6 @@ def p_statement(p):
         | structure'''
     p[0] = p[1]
 
-"""
-def p_number_statement(p):
-    '''expression : number_statement'''
-    print(p[1])
-    p[0] = AST.TokenNode(p[1])
-"""
-
 def p_tq_structure(p):
     '''structure : TQ expression '{' programme '}' '''
     p[0] = AST.TqNode([p[2], p[4]])
