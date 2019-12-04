@@ -2,15 +2,20 @@ let context = document.getElementById('canvas').getContext('2d');
 
 let g = new Galapagos(context, 10, 10, 400, 200);
 let t = new Turtle(context, g, 10, 10, 0);
-t.moveStraight(40);
-t.turnLeft(90);
-t.moveStraight(50);
-t.turnRight(20);
-t.moveStraight(200);
-t.turnLeft(30);
-t.moveStraight(200);
-t.takeOff();
-t.moveStraight(20);
-t.landing();
-t.turnRight(80);
-t.moveStraight(40);
+
+let animator = new Animator()
+
+animator.addToAnimationStack(t.moveStraight.bind(t), 40)
+animator.addToAnimationStack(t.turnLeft.bind(t), 90)
+animator.addToAnimationStack(t.moveStraight.bind(t), 50)
+animator.addToAnimationStack(t.turnRight.bind(t), 20)
+animator.addToAnimationStack(t.moveStraight.bind(t), 200)
+animator.addToAnimationStack(t.turnLeft.bind(t), 30)
+animator.addToAnimationStack(t.moveStraight.bind(t), 20)
+animator.addToAnimationStack(t.takeOff.bind(t), null)
+animator.addToAnimationStack(t.moveStraight.bind(t), 20)
+animator.addToAnimationStack(t.landing.bind(t), null)
+animator.addToAnimationStack(t.turnRight.bind(t), 80)
+animator.addToAnimationStack(t.moveStraight.bind(t), 40)
+
+animator.animate(null)
