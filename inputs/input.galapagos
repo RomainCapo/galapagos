@@ -11,5 +11,8 @@ Atterrir t;
 a = PositionX(t);
 
 Si POSITIONX(t) > 20 {
-    Decoller t;
+    Si PositionY(t) > 10 {
+        Decoller t;
+    };
+    Atterrir t;
 };
