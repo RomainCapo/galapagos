@@ -1,7 +1,14 @@
 let context = document.getElementById('canvas').getContext('2d');
-
-let g = new Galapagos(context, 10, 10, 400, 200);
+let g = new Galapagos(context, 0, 10, 500, 300);
 let t = new Turtle(context, g, 10, 10, 0);
-t.moveStraight(40);
-t.turnRight(90);
-t.moveStraight(50);
+t.moveStraight(120);
+t.turnRight(-30);
+t.moveStraight(120);
+t.turnRight(-60);
+t.moveStraight(30);
+t.turnLeft(30);
+t.moveBack(50);
+t.turnRight(-50);
+t.moveStraight(100);
+t.turnRight(-40);
+t.moveStraight(100);

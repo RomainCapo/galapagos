@@ -93,12 +93,11 @@ if __name__ == "__main__":
     print(ast)
     compiled = "let context = document.getElementById('canvas').getContext('2d');\n"
     compiled += ast.compile()
-    print(compiled)
 
-    '''BASE_OUTPUT_DIR = "outputs/"
+    BASE_OUTPUT_DIR = "outputs/"
     OUTPUT_FILENAME = "compiled_code.js"
     name = BASE_OUTPUT_DIR + OUTPUT_FILENAME    
     outfile = open(name, 'w')
     outfile.write(compiled)
     outfile.close()
-    print ("Wrote output to", name)'''
+    print ("Wrote output to", name)

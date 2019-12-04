@@ -8,8 +8,8 @@ TournerDroite t 30;
 Decoller t;
 Atterrir t;
 
-Entier a = 10;
+Entier a = 10; //zeiufkjw
 
-Tq PositionX(t) > 20{
-    Decoller t;
+Tq PositionX(t) > 20 {
+	Atterrir t;
 };
