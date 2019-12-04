@@ -20,9 +20,7 @@ tokens = (
     'NUMBER',
     'IDENTIFIER',
     'COMMENTS',
-    'COMPARISON_OP',
-    'ADD_OP',
-    'MUL_OP'
+    'ALGEBRAIC_OP',
 ) + tuple(map(lambda s:s.upper(), reserved_words))
 
 literals = '();={},'
@@ -43,14 +41,14 @@ def t_COMMENTS(t):
     t.lexer.lineno += 1
     # Pas de retourne car non utilisé par l'analyseur syntaxique
 
-def t_COMPARISON_OP(t):
-    r'[><]'
+def t_ALGEBRAIC_OP(t):
+    r'[><+\-*/]'
     return t
 
 def t_ADD_OP(t):
 	r'[+-]'
 	return t
-	
+
 def t_MUL_OP(t):
 	r'[*/]'
 
