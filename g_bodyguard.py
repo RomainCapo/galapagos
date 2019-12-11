@@ -12,16 +12,28 @@ class Bodyguard:
         self.dict_turtle[turtle_name].add_observer(self)
 
     def safety_check(self, turtle):
-        print("Should check safety")
         galapagos = self.dict_galapagos[turtle.g]
+
         if self._is_out_galapagos(galapagos, turtle):
             print("Out of galapagos")
         else:
-            print("Is safe")
+            print("In galapagos")
+
+        if self._is_colliding(turtle):
+            print("Is colliding")
+        else:
+            print("No collision")
 
     def _is_out_galapagos(self, galapagos, turtle):
         return turtle.x < galapagos.x or turtle.x > galapagos.x + galapagos.width \
             or turtle.y < galapagos.y or turtle.y > galapagos.y + galapagos.height
+
+    def _is_colliding(self, turtle):
+        t_xrange = [turtle.x + 10, turtle.x - 10]
+        t_yrange = [turtle.y + 10, turtle.y - 10]
+        collision_check = lambda t: t.x in t_xrange or turtle.y in t_yrange
+
+        return len(list(filter(collision_check, self.dict_turtle.values()))) > 0
 
 class Observable:
 
@@ -67,4 +79,8 @@ if __name__ == "__main__":
     b.add_turtle("t1", t)
 
     t.update_pos(100)
-    t.update_pos(1000)
+
+    t2 = Turtle(0, 0, 30, 'g1')
+    b.add_turtle("t2", t2)
+
+    t2.update_pos(115)

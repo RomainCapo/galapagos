@@ -1,4 +1,5 @@
 import ply.lex as lex
+import sys
 
 reserved_words = (
     'SI',
@@ -58,7 +59,7 @@ def t_newline(t):
 
 def t_error(t):
     print(f"Illegal character {repr(t.value[0])}")
-    t.lexer.skip(1)
+    sys.exit(1)
 
 t_ignore = ' \t'
 
