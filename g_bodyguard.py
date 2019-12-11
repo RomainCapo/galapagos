@@ -1,3 +1,5 @@
+from math import cos, sin, pi
+
 class Bodyguard:
 
     def __init__(self):
@@ -48,6 +50,20 @@ class Turtle(Observable):
     def update_pos(self, pos):
         self.x += pos
         self.notify_observer()
+    
+    def move_straight(self, distance):
+        self.x += distance * cos(self.alpha)
+        self.y += distance * sin(self.alpha)
+    
+    def move_back(self, distance):
+        self.move_straight(-distance)
+    
+    def turn_right(self, angle):
+        self.alpha += -angle * (pi/180)
+    
+    def turn_left(self, angle):
+        self.alpha -= -angle * (pi/180)
+
 
 class Galapagos:
 

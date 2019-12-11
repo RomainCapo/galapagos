@@ -1,6 +1,6 @@
 import AST
 from AST import addToClass
-from g_bodyguard import Bodyguard
+from g_bodyguard import Bodyguard, Galapagos, Turtle
 
 '''
 DEV note:
@@ -16,11 +16,26 @@ if len(self.children) != 1:
 '''
 
 cache = {}
+bodyguard = Bodyguard()
 
-def assign_cache(d_type, identifier):
-    ''' When a new variable is declared, add it to the dictionnary (cache). Raise an error if a variable with this name already exists. '''
+def assign_cache(children):
+    ''' 
+    When a new variable is declared, add it to the dictionnary (cache). 
+    Raise an error if a variable with this name already exists. 
+    '''
+
+    identifier = children[0].tok[1]
+    d_type = children[0].tok[0]
+    coords = children[1:]
+    
     if identifier not in cache:
         cache[identifier] = d_type
+        if d_type == 'Galapagos':
+            galapagos = Galapagos(*coords)
+            bodyguard.add_galapagos(identifier, galapagos)
+        elif d_type == 'Tortue':
+            turtle = Turtle(*coords)
+            bodyguard.add_turtle(identifier, turtle)
     else:
         raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
 
@@ -54,9 +69,9 @@ def check_type(identifiers, main_type):
         if identifier.tok not in cache:
             if type(identifier.tok) not in allowed_types[main_type][i]:
                 raise Exception(f"\n\tInstruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
-                    f"\n\t'{identifier.tok}' ({type(identifier.tok) if type(identifier.tok) is not str else 'uknown identifier'}) given.")
+                    f"\n\t'{identifier.tok}' ({type(identifier.tok) if type(identifier.tok) is not str else 'unknown identifier'}) given.")
         else:
-            if cache[identifier.tok] not in allowed_types[main_type][i]:                
+            if cache[identifier.tok] not in allowed_types[main_type][i]:
                 raise Exception(f"\n\tInstruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
                     f"\n\t'{identifier.tok}' ({cache[identifier.tok]}) given.")
 
@@ -67,8 +82,6 @@ def visit_children(children, DEBUG=False):
 @addToClass(AST.ProgramNode)
 def semantic(self, DEBUG=False):
     print(f"Program node\n\t {self.children}\n") if DEBUG else 0
-    b1 = Bodyguard("10")
-    b = Bodyguard()
     visit_children(self.children, DEBUG=DEBUG)
 
 
@@ -83,7 +96,7 @@ def semantic(self, DEBUG=False):
 @addToClass(AST.AssignNode)
 def semantic(self, DEBUG=False):
     print(f"Assign node\n\t {self.children}\n") if DEBUG else 0
-    assign_cache(self.children[0].tok[0], self.children[0].tok[1]) #example: assign_cache(Tortue, t)
+    assign_cache(self.children)
     check_type(self.children[1:], self.children[0].tok[0]) #example: check_type([0, 10, 50, 50], Galapagos)
 
 @addToClass(AST.AvancerNode)
