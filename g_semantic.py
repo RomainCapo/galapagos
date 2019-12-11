@@ -1,5 +1,6 @@
 import AST
 from AST import addToClass
+from g_bodyguard import Bodyguard
 
 '''
 DEV note:
@@ -66,7 +67,10 @@ def visit_children(children, DEBUG=False):
 @addToClass(AST.ProgramNode)
 def semantic(self, DEBUG=False):
     print(f"Program node\n\t {self.children}\n") if DEBUG else 0
+    b1 = Bodyguard("10")
+    b = Bodyguard()
     visit_children(self.children, DEBUG=DEBUG)
+
 
 @addToClass(AST.TokenNode)
 def semantic(self, DEBUG=False):
