@@ -1,4 +1,4 @@
-import AST 
+import AST
 from AST import addToClass
 from g_parser import parse
 from g_semantic import semantic
@@ -90,41 +90,45 @@ def compile(self):
 if __name__ == "__main__":
     import sys, os
 
-    DEBUG = True if len(sys.argv) == 3 and sys.argv[2].upper() == 'DEBUG' else False
-    BASE_DIR = "outputs/pdf/"
+    try:
+        DEBUG = True if len(sys.argv) == 3 and sys.argv[2].upper() == 'DEBUG' else False
+        BASE_DIR = "outputs/pdf/"
 
-    prog = open(sys.argv[1]).read()
-    print("\n## PARSING: start")
-    ast = parse(prog)
+        prog = open(sys.argv[1]).read()
+        print("\n## PARSING: start")
+        ast = parse(prog)
 
-    graph = ast.makegraphicaltree()
-    
-    path_name = BASE_DIR + os.path.splitext(sys.argv[1])[0].split("/")[-1] + '-ast.pdf'
-    graph.write_pdf(path_name)
-    print("\n"+str(ast)) if DEBUG else 0
-    print("\n## PARSING: end - success")
-    print("\twrote ast to", path_name)
+        graph = ast.makegraphicaltree()
 
-    print("\n## SEMANTIC: start\n")
-    ast.semantic(DEBUG)
-    print("## SEMANTIC: end - success\n")
+        path_name = BASE_DIR + os.path.splitext(sys.argv[1])[0].split("/")[-1] + '-ast.pdf'
+        graph.write_pdf(path_name)
+        print("\n"+str(ast)) if DEBUG else 0
+        print("\n## PARSING: end - success")
+        print("\twrote ast to", path_name)
 
-    compiled = "let context = document.getElementById('canvas').getContext('2d');\n"
-    compiled += "let animator = new Animator();\n"
-    print("\n## COMPILER: start\n")
-    compiled += ast.compile()
-    compiled += "animator.animate(null);"
-    print(compiled) if DEBUG else 0
-    print("## COMPILER: end - success")
+        print("\n## SEMANTIC: start\n")
+        ast.semantic(DEBUG)
+        print("## SEMANTIC: end - success\n")
 
-    BASE_OUTPUT_DIR = "outputs/"
-    OUTPUT_FILENAME = "compiled_code.js"
-    name = BASE_OUTPUT_DIR + OUTPUT_FILENAME
-    outfile = open(name, 'w')
-    outfile.write(compiled)
-    outfile.close()
-    print ("\tWrote code to", name)
+        compiled = "let context = document.getElementById('canvas').getContext('2d');\n"
+        compiled += "let animator = new Animator();\n"
+        print("\n## COMPILER: start\n")
+        compiled += ast.compile()
+        compiled += "animator.animate(null);"
+        print(compiled) if DEBUG else 0
+        print("## COMPILER: end - success")
 
-    print("\nOpening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
-    import webbrowser
-    webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
+        BASE_OUTPUT_DIR = "outputs/"
+        OUTPUT_FILENAME = "compiled_code.js"
+        name = BASE_OUTPUT_DIR + OUTPUT_FILENAME
+        outfile = open(name, 'w')
+        outfile.write(compiled)
+        outfile.close()
+        print ("\tWrote code to", name)
+
+        print("\nOpening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
+        import webbrowser
+        webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
+        sys.exit(0)
+    except BaseException as be:
+        sys.exit(1)
