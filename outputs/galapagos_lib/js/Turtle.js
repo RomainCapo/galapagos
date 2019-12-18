@@ -8,22 +8,32 @@ class Turtle
 		this.posY = this.galapagos.posY + startPosY;
 		this.angle = this._degToRad(-startAngle);
 		this.isGrounded = true;
+    this.turtleImage = document.getElementById("turtle_image");
+    this.nbDrawnTurtle = 0;
 	}
 
+  _deleteTurtle(){
+    if(this.nbDrawnTurtle != 0)
+    {
+      this.context.globalCompositeOperation ="xor"
+      this.context.drawImage(this.turtleImage, this.posX - 15, this.posY - 15);
+      this.context.globalCompositeOperation ="source-over"
+    }
+  }
+
 	_drawTurtlePos(){
-		let drawing = new Image();
-		drawing.src = "js_lib/turtle.png";
-		drawing.onload = () => {
-			context.drawImage(drawing,this.posX-15,this.posY-15);
-		}
+    this.context.drawImage(this.turtleImage, this.posX - 15, this.posY - 15);
+    this.nbDrawnTurtle++;
 	}
 
 	turnRight(angle){
+    this._deleteTurtle();
 		this.angle += this._degToRad(-angle);
 		this._drawTurtlePos();
 	}
 
 	turnLeft(angle){
+    this._deleteTurtle();
 		this.angle -= this._degToRad(-angle);
 		this._drawTurtlePos();
 	}
@@ -37,6 +47,7 @@ class Turtle
 	}
 
 	moveStraight(distance){
+    this._deleteTurtle();
 		this.context.strokeStyle = '#000000';
 		this.context.beginPath();
 		this.context.moveTo(this.posX, this.posY);
@@ -50,6 +61,7 @@ class Turtle
 	}
 
 	moveBack(distance){
+    this._deleteTurtle();
 		this.moveStraight(-distance);
 		this._drawTurtlePos();
 	}
