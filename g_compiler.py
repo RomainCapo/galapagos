@@ -125,7 +125,6 @@ if __name__ == "__main__":
     outfile.close()
     print ("\tWrote code to", name)
 
-    if not DEBUG:
-        print("\nOpening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
-        import webbrowser
-        webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
+    print("\nOpening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
+    import webbrowser
+    webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))

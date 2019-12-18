@@ -9,6 +9,9 @@ TournerDroite t 50;
 Avancer t 120;
 Decoller t;
 Atterrir t;
+Avancer t 10;
+Avancer t 10;
+Avancer t 10;
 
 Entier a = 10; //zeiufkjw
 
