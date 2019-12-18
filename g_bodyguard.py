@@ -16,15 +16,29 @@ class Bodyguard:
 
     def safety_check(self, turtle):
         galapagos = self.dict_galapagos[turtle.g]
-        if self._is_out_galapagos(galapagos, turtle):
+
+        if self._is_in_galapagos(galapagos, turtle):
             print("Error: out of galapagos - Safety check returns") if self.debug else 0
+            raise Exception("so")
             raise Exception(f"Error: Turtle '{turtle.name}' (x: {int(turtle.x)}; y: {int(turtle.y)}) went out of galapagos {turtle.g}")
         else:
             print(f"Safe: Turtle '{turtle.name}' stayed inside galapagos") if self.debug else 0
 
-    def _is_out_galapagos(self, galapagos, turtle):
-        return turtle.x < galapagos.x or turtle.x > galapagos.x + galapagos.width \
-            or turtle.y < galapagos.y or turtle.y > galapagos.y + galapagos.height
+        if self._is_colliding(turtle):
+            print("Is colliding")
+        else:
+            print("No collision")
+
+    def _is_in_galapagos(self, galapagos, turtle):
+        return turtle.x >= galapagos.x and turtle.x <= galapagos.x + galapagos.width \
+            and turtle.y >= galapagos.y and turtle.y <= galapagos.y + galapagos.height
+
+    def _is_colliding(self, turtle):
+        t_xrange = [turtle.x + 10, turtle.x - 10]
+        t_yrange = [turtle.y + 10, turtle.y - 10]
+        collision_check = lambda t: t.x in t_xrange or t.y in t_yrange
+
+        return len(list(filter(collision_check, self.dict_turtle.values()))) > 0
 
 class Observable:
 
@@ -85,7 +99,9 @@ if __name__ == "__main__":
     t = Turtle(0, 0, 30, 'g1')
     b.add_turtle("t1", t)
 
-    t.move_straight(10)
+    t.update_pos(80)
 
-    t.update_pos(100)
-    t.update_pos(1000)
+    t2 = Turtle(0, 0, 30, 'g1')
+    b.add_turtle("t2", t2)
+
+    t2.update_pos(105)
