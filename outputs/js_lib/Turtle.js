@@ -19,12 +19,12 @@ class Turtle
 	}
 
 	turnRight(angle){
-		this.angle += this._degToRad(-angle);
+		this.angle -= this._degToRad(-angle);
 		this._drawTurtlePos();
 	}
 
 	turnLeft(angle){
-		this.angle -= this._degToRad(-angle);
+		this.angle += this._degToRad(-angle);
 		this._drawTurtlePos();
 	}
 

@@ -3,8 +3,8 @@ Tortue t = g 10 10 0; // Cree une tortue dans la zone g
 
 Avancer t 120;
 Entier p = 10;
-TournerGauche t 30;
-Avancer t 10;
+TournerDroite t 10;
+Avancer t 1;
 TournerDroite t 50;
 Avancer t 120;
 Decoller t;
