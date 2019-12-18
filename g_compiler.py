@@ -26,12 +26,18 @@ def compile(self):
     var_type = self.children[0].tok[0]
     var_name = self.children[0].tok[1]
 
+    print("type : ",var_type)
+    print("name : ",var_name)
+    print("-----")
+
     if var_type == "Tortue":
         js_code += "let {0} = new Turtle(context, {1}, {2}, {3}, {4})".format(var_name, self.children[1].compile(), self.children[2].compile(), self.children[3].compile(), self.children[4].compile())
     elif var_type == "Galapagos":
         js_code += "let {0} = new Galapagos(context, {1}, {2}, {3}, {4})".format(var_name, self.children[1].compile(), self.children[2].compile(), self.children[3].compile(), self.children[4].compile())
     elif var_type == "Entier":
         js_code += "let {0} = {1}".format(var_name, self.children[1].compile())
+    elif var_type == "REASSIGN":
+        js_code += "{0} = {1}".format(var_name, self.children[1].compile())
 
     return js_code
 

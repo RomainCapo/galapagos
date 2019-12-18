@@ -18,8 +18,12 @@ cache = {}
 
 def assign_cache(d_type, identifier):
     ''' When a new variable is declared, add it to the dictionnary (cache). Raise an error if a variable with this name already exists. '''
+
     if identifier not in cache:
         cache[identifier] = d_type
+    elif d_type == "REASSIGN":
+        if cache[identifier].upper().strip() != "Entier".upper().strip():
+            raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
     else:
         raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
 
@@ -32,7 +36,8 @@ allowed_types = {
     'TournerDroite': [['Tortue'], [int, float, 'Entier']],
     'Decoller':  [['Tortue']],
     'Atterrir': [['Tortue']],
-    'Entier': [[int, float]]
+    'Entier': [[int, float]],
+    'REASSIGN' : [[int, float]]
 }
 
 def check_type(identifiers, main_type):
@@ -49,16 +54,15 @@ def check_type(identifiers, main_type):
         main_type: Tortue
     '''
 
-
     for i, identifier in enumerate(identifiers):
 
         if identifier.compile() not in cache:
             if type(identifier.compile()) not in allowed_types[main_type][i]:
-                raise Exception(f"\n\tInstruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
+                print(f"\n\t Warning : Instruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
                     f"\n\t'{identifier.compile()}' ({type(identifier.compile()) if type(identifier.compile()) is not str else 'uknown identifier'}) given.")
         else:
             if cache[identifier.compile()] not in allowed_types[main_type][i]:                
-                raise Exception(f"\n\tInstruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
+                print(f"\n\t Warning : Instruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
                     f"\n\t'{identifier.compile()}' ({cache[identifier.compile()]}) given.")
 
 def visit_children(children, DEBUG=False):

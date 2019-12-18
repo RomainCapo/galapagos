@@ -42,6 +42,10 @@ def p_expression_num_or_var(p):
         | IDENTIFIER'''
     p[0] = AST.TokenNode(p[1])
 
+def p_re_assign(p):
+    '''assignation : IDENTIFIER '=' expression'''
+    p[0] = AST.AssignNode([AST.TokenNode(['REASSIGN', p[1]]), p[3]])
+
 def p_assign(p):
     '''assignation : ENTIER IDENTIFIER '=' expression
         | GALAPAGOS IDENTIFIER '=' expression expression expression expression
