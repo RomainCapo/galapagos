@@ -131,4 +131,5 @@ if __name__ == "__main__":
         webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
         sys.exit(0)
     except BaseException as be:
+        print(be)
         sys.exit(1)
