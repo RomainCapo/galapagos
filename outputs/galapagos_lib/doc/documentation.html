@@ -1,0 +1,58 @@
+<!Doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Galapagos</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="galapagos_lib/css/main.css">
+    </head>
+    <body>
+        <div class="container">
+          <br>
+          <h1 class="text-center">Comands list</h1>
+          <ul>
+            <li><strong>Galapagos &lt; nom > = &lt; positionX >, &lt; positionY >, &lt; width >, &lt; height >;</strong>
+            <br/>Créer une zone dans laquelle peut se déplacer une ou plusieurs tortue</li><br/>
+
+            <li><strong>Tortue &lt; nom > = &lt; Galapagos >, &lt; positionX >, &lt; positionY >, &lt; angle >;</strong>
+              <br/>Crée une nouvelle tortue dans la zone <Galapagos>, en position <positionX>;<postionY> et d'angle <angle>. Les angles suivent la logique d'un cercle trigonométrique.</li><br/>
+
+            <li><strong>Avancer &lt; tortue > &lt; quantité >;</strong>
+            <br/>Fait avancer une <tortue> d'une certaine <quantité></li><br/>
+
+            <li><strong>Reculer &lt; tortue > &lt; quantité >;</strong>
+            <br/>Fait reculer une <tortue> d'une certaine <quantité></li><br/>
+
+            <li><strong>TournerGauche &lt; tortue > &lt; angle >;</strong>
+            <br/>Fait tourner la tortue dans le sens antihoraire</li><br/>
+
+            <li><strong>TournerDroite &lt; tortue > &lt; angle >;</strong>
+            <br/>Fait tourner la tortue dans le sens horaire</li><br/>
+
+            <li><strong>Decoller &lt; tortue >;</strong>
+            <br/>La Tortue ne dessine plus son tracé derrière elle</li><br/>
+
+            <li><strong>Atterrir &lt; tortue >;</strong>
+            <br/>La Tortue dessine le tracé derrière elle</li><br/>
+
+            <li><strong>Si &lt; condition > { &lt; programme > }</strong>
+            <br/><programme> est executé uniquement si <condition> est satisfait</li><br/>
+
+            <li><strong>Tq &lt; condition > { &lt; programme > }</strong>
+            <br/><programme> est executé tant que <condition> est satisfait</li><br/>
+
+            <li><strong>positionX &lt; tortue ></strong>
+            <br/>Retourne la position actuelle de la tortue sur l'axe X</li><br/>
+
+            <li><strong>positionY &lt; tortue ></strong>
+            <br/>Retourne la position actuelle de la tortue sur l'axe Y</li><br/>
+
+            <li><strong>// &lt; texte ></strong>
+            <br/>Commentaire</li>
+          </ul>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>

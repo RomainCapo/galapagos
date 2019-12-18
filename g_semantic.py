@@ -66,15 +66,17 @@ def check_type(identifiers, main_type):
         main_type: Tortue
     '''
 
+
     for i, identifier in enumerate(identifiers):
-        if identifier.tok not in cache:
-            if type(identifier.tok) not in allowed_types[main_type][i]:
+        if identifier.compile() not in cache:
+            if type(identifier.compile()) not in allowed_types[main_type][i]:
                 raise Exception(f"\n\tInstruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
-                    f"\n\t'{identifier.tok}' ({type(identifier.tok) if type(identifier.tok) is not str else 'unknown identifier'}) given.")
+                    f"\n\t'{identifier.compile()}' ({type(identifier.compile()) if type(identifier.compile()) is not str else 'uknown identifier'}) given.")
         else:
-            if cache[identifier.tok] not in allowed_types[main_type][i]:
+            if cache[identifier.compile()] not in allowed_types[main_type][i]:                
                 raise Exception(f"\n\tInstruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
-                    f"\n\t'{identifier.tok}' ({cache[identifier.tok]}) given.")
+                    f"\n\t'{identifier.compile()}' ({cache[identifier.compile()]}) given.")
+
 
 def visit_children(children):
     for child in children:

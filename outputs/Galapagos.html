@@ -3,12 +3,45 @@
     <head>
         <meta charset="utf-8">
         <title>Galapagos</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="galapagos_lib/css/main.css">
     </head>
     <body>
-        <canvas id="canvas" width="1000" height="500" style="border:1px solid #000000;"></canvas>
-        <script src="js_lib/Galapagos.js"></script>
-        <script src="js_lib/Turtle.js"></script>
-        <script src="js_lib/Animator.js"></script>
+		    <img id="turtle_image" src="galapagos_lib/img/turtle.png" />
+        <div class="container">
+          <br>
+          <h1 class="text-center"><em>Galapagos Projet</em></h1>
+          <br>
+          <h5 id="execution_info"><strong>In execution </strong></h5>
+          <img src="galapagos_lib/img/loader.gif" id="loader"/>
+          <br>
+          <br>
+          <canvas id="canvas" width="1100" height="500"></canvas>
+          <br>
+          <br>
+          <div class="card border-success mb-3">
+            <div class="card-header">About</div>
+            <div class="card-body text-success">
+              <h5 class="card-title">Developper</h5>
+              <p class="card-text">Bouthillier François, Freiburghaus Jonas & Capocasale Romain</p>
+              <h5 class="card-title">Date</h5>
+              <p class="card-text">Spring semester 2019</p>
+              <h5 class="card-title">Course</h5>
+              <p class="card-text">Compilator</p>
+              <h5 class="card-title">Professor</h5>
+              <p class="card-text">Tièche François</p>
+              <h5 class="card-title">Commands list</h5>
+              <p class="card-text">Go to the <a href="galapagos_lib/doc/documentation.html">command list</a> !</p>
+              </p>
+            </div>
+          </div>
+        </div>
+        <script src="galapagos_lib/js/Galapagos.js"></script>
+        <script src="galapagos_lib/js/Turtle.js"></script>
+        <script src="galapagos_lib/js/Animator.js"></script>
         <script src="compiled_code.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
 </html>
