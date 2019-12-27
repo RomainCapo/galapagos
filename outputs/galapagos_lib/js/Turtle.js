@@ -4,8 +4,8 @@ class Turtle
 	constructor(context, galapagos, startPosX, startPosY, startAngle){
 		this.context = context;
 		this.galapagos = galapagos;
-		this.posX = this.galapagos.posX + startPosX;
-		this.posY = this.galapagos.posY + startPosY;
+		this.posX =   startPosX;
+		this.posY =  startPosY;
 		this.angle = this._degToRad(-startAngle);
 		this.isGrounded = true;
     this.turtleImage = document.getElementById("turtle_image");

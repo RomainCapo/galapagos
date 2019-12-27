@@ -13,3 +13,7 @@
 #loader {
   position: absolute;
 }
+
+.container {
+  min-width: 1400px;
+}

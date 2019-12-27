@@ -1,5 +1,7 @@
 Galapagos g = 0 10 500 500; // Definis une zone pour une tortue
 Tortue t = g 10 10 0; // Cree une tortue dans la zone g
 
-Entier ab = 0;
-ab = ab +1;
+Tortue t2 = g 50 50 0; // Cree une tortue dans la zone g
+
+Avancer t 30;
+Avancer t2 300;
