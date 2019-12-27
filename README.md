@@ -1,11 +1,9 @@
 # Intoduction / contexte
+Dans le cadre du cours de compilateur, il nous est demandé de réaliser un projet dans le but d'approfondir les concepts vu en cours. Le but de ce projet est d'inventer un language de programmation et créer un compilateur ou interpreteur permettant de retourner une sortie selon le code écrit dans ce language.
 
-Projet de compilateur du 5ème semestre de Bachelor à la Haute-Ecole Arc.
-
-Année 2019-2020.
+Pour notre projet, nous avons décider de créer un language de dessin a base d'acteur (tortue) et de zone(galapagos). Les différents acteurs ont la possibilité de dessiner sur les zones qui leur sont attribués. Notre but est de créer un compilateur avec toutes les étapes vu en cours (analyse lexicale, analyse syntaxique, analyse sémantique et génération de code) qui va pouvoir à partir de notre language défini auparavant, dessiner des formes sur un canvas HTML.
 
 ## Auteurs
-
 François Bouthillier de Beaumont, Romain Capocasale, Jonas Freiburghaus
 
 # Cahier des charges
@@ -118,25 +116,135 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
 
 ## Exemple de script
 
-```galapagos
-Galapagos g = 0, 10, 50, 50;  // Definis une zone pour une tortue
-Tortue t = g, 10,10, 0; // Cree une tortue dans la zone g
+### Exemple 1
+* Declaration d'une galapagos au point (10,10) d'une largeur 500 et une hauteur 300
+* Declaration d'une tortue au point (50, 50) avec un angle de 0°
+* la avance de 100 pixels
 
-Avancer t 10;
-Reculer t 10;
-TournerGauche t 10;
-TournerDroite t 30;
+```galapagos
+Galapagos g = 10, 10, 500, 300;  // Definis une zone pour une tortue
+Tortue t = g, 50,50, 0; // Cree une tortue dans la zone g
+
+Avancer t 100;
+```
+
+### Exemple 2
+* Rotation de la tortue à droite et gauche d'un certain angle
+* Mouvement arrière de 50 pixel de la tortue
+
+```galapagos
+Galapagos g = 10, 10, 500, 300;  // Definis une zone pour une tortue
+Tortue t = g, 50,50, 0; // Cree une tortue dans la zone g
+
+Avancer t 100;
+TournerDroite t 90;
+Avancer t 100;
+TournerGauche t 30;
+Reculer t 50;
+```
+
+### Exemple 3
+* Déclaration d'un entier ``a`` à 100
+* Utilisation de la valeur de cet entier
+* Décollage et atterissage d'une tortue (Le tracé de la tortue n'est plus dessiné lorqu'elle est en l'air)
+* Réassignation de l'entier ``a`` à 50
+
+```galapagos
+Galapagos g = 10, 10, 500, 300;  // Definis une zone pour une tortue
+Tortue t = g, 50,50, 0; // Cree une tortue dans la zone g
+
+Entier a = 100;
+
+Avancer t a;
+TournerDroite t 90;
+
 Decoller t;
+Avancer t 50;
 Atterrir t;
 
-Si positionX(t) > 10
-{
-    TournerGauche g 10;
-};
+a = 50;
 
-Tq positionY(t) < 20
+TournerGauche t 30;
+Avancer t a;
+```
+
+### Exemple 4
+* 2 tortues sur une seule galapagos
+* Deplacement de 2 tortues sur le même galapagos
+
+```galapagos
+Galapagos g = 10 10 500 300; // Definis une zone pour une tortue
+Tortue t1 = g 50 50 90; // Cree une tortue dans la zone g
+Tortue t2 = g 450 50 90; // Cree une tortue dans la zone g
+
+Entier a = 100;
+Entier b = 90;
+
+Avancer t1 a;
+Avancer t2 a;
+
+TournerGauche t1 b;
+TournerDroite t2 b;
+
+Avancer t1 a;
+Avancer t2 a;
+
+TournerGauche t1 b;
+TournerDroite t2 b;
+
+Avancer t1 a + 20;
+Avancer t2 a - 50;
+```
+
+## Exemple 5
+* 2 galapagos et 2 tortues, 1 tortue par galapagos
+* Utilisation de la structure si
+* Récupération de la position de la tortue
+* Utilisation d'opérateur de comparaison
+* Calcul d'une expression directement dans la condition (a + 50)
+
+```galapagos
+Galapagos g1 = 10 10 500 300; // Definis une zone pour une tortue
+Galapagos g2 = 750 100 300 300; // Definis une zone pour une tortue
+
+Tortue t1 = g1 50 50 90; // Cree une tortue dans la zone g
+Tortue t2 = g2 850 120 90; // Cree une tortue dans la zone g
+
+Avancer t2 100;
+Entier a = 30;
+
+Si PositionX(t2) > a + 50
 {
-    Avancer t 10;
+	Avancer t1 50;
+	TournerGauche t1 90;
+	Avancer t1 100;
+};
+```
+
+### Exemple 6
+* Imbrication de structure
+* Utilisation de la structure tant que
+
+```galapagos
+Galapagos g1 = 10 10 500 300; // Definis une zone pour une tortue
+Galapagos g2 = 750 100 300 300; // Definis une zone pour une tortue
+
+Tortue t1 = g1 50 50 90; // Cree une tortue dans la zone g
+Tortue t2 = g2 850 120 90; // Cree une tortue dans la zone g
+
+Avancer t2 100;
+Entier a = 0;
+
+Tq a < 3
+{
+	a = a + 1;
+
+	Si PositionY(t2) > 5
+	{
+		Avancer t2 55;
+	};
+	Avancer t1 70;
+	TournerGauche t1 90;
 };
 ```
 
@@ -162,6 +270,9 @@ Le code résultant de la compilation doit donc être executé dans une page HTML
 Lors de la génération de code, les différents déplacement de la tortue sont déposés dans une queue (coté javascript). Une fois le fichier ``Galapagos.html`` lancé, les animations dans la queue vont être exécuté dans l'ordre une par une. Un interval fixe est défini entre chaque exécution d'un mouvement de la tortue. Ceci pour donner un effet d'animation.
 
 # Conclusion
+Pour conclure, nous pouvons dire que notre projet est fonctionnel et réponds au différents objectifs que nous avons fixer au départ. Les princiaples étapes de création d'un compilateur (analyse lexicale, analyse syntaxique, analyse sémantique et génération de code) ont été implémenté avec succès. Le code fournie en entrée au programme effectue correctement les différentes animations de la tortue comme nous l'avions défini au début du projet.
+
+Ce projet nous as permis d'approfondir les différentes sujets de la compilation vu en cours. Cela permet également de pourvoir appliquer les différents concepts dans des cas pratiques.
 
 ## TODO
 
