@@ -1,4 +1,4 @@
-# Galapagos
+# Intoduction / contexte
 
 Projet de compilateur du 5ème semestre de Bachelor à la Haute-Ecole Arc.
 
@@ -8,7 +8,7 @@ Année 2019-2020.
 
 François Bouthillier de Beaumont, Romain Capocasale, Jonas Freiburghaus
 
-## Cahier des charges
+# Cahier des charges
 
 Le but de projet est de créer un language et de le compiler vers du JavaScript, afin de pouvoir dessiner instictivement sur un canvas HTML. Ainsi, grâce à une syntaxe très lisible, l'utilisateur du langague aurait la possibilité de créer des acteurs, les tortues, et de les déplacer sur le canvas.
 Un acteur (Tortue) a une position X, une position Y et un sens.
@@ -41,9 +41,9 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
       * Impossibilité de mener des acteurs en dehors de leur zone
       * Impossibilité de mener des acteurs à une collision
 
-## Fonctionnement du langage
+# Fonctionnement du langage
 
-### Fonctionnalités
+## Fonctionnalités
 
 * Variables
 * Branchement
@@ -52,16 +52,16 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
 * Commentaire uniligne
 * Evaluation algébrique
 
-### Mots clés réservés
+## Mots clés réservés
 
 * **Tortue < nom > = < Galapagos >, < positionX >, < positionY >, < angle >;**
 <br/>Crée une nouvelle tortue dans la zone <Galapagos>, en position <positionX>;<postionY> et d'angle <angle>. Les angles suivent la logique d'un cercle trigonométrique.
 * **Galapagos < nom > = < positionX >, < positionY >, < width >, < height >;**
 <br/>Créer une zone dans laquelle peut se déplacer une ou plusieurs tortue
-* **Avancer < tortue > < quantité >;**
-<br/>Fait avancer une <tortue> d'une certaine <quantité>
-* **Reculer < tortue > < quantité >;**
-<br/>Fait reculer une <tortue> d'une certaine <quantité>
+* **Avancer < tortue > < distance >;**
+<br/>Fait avancer une <tortue> d'une certaine <distance>
+* **Reculer < tortue > < distance >;**
+<br/>Fait reculer une <tortue> d'une certaine <distance>
 * **TournerGauche < tortue > < angle >;**
 <br/>Fait tourner la tortue dans le sens antihoraire
 * **TournerDroite < tortue > < angle >;**
@@ -74,22 +74,25 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
 <br/><programme> est executé uniquement si <condition> est satisfait
 * **Tq < condition > { < programme > }**
 <br/><programme> est executé tant que <condition> est satisfait
-* **positionX < tortue >**
+* **positionX(< tortue >)**
 <br/>Retourne la position actuelle de la tortue sur l'axe X
-* **positionY < tortue >**
+* **positionY(< tortue >)**
 <br/>Retourne la position actuelle de la tortue sur l'axe Y
 * **// < texte >**
 <br/>Commentaire
 
-### Gramaire
+## Régles de gramaire
 
 * **programme : statement ';' **
 * **programme : statement ';' programme**
-* **statement : assignation | structure**
+* **statement : assignation
+       | structure**
 * **structure : TQ expression '{' programme '}'**
 * **structure : SI expression '{' programme '}'**
 * **expression : expression ALGEBRAIC_OP expression**
-* **expression : NUMBER | IDENTIFIER**
+* **expression : NUMBER
+        | IDENTIFIER**
+* **assignation : IDENTIFIER '=' expression**
 * **assignation : ENTIER IDENTIFIER '=' expression
         | GALAPAGOS IDENTIFIER '=' expression expression expression expression
         | TORTUE IDENTIFIER '=' expression expression expression expression**
@@ -102,7 +105,7 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
 * **expression : POSITIONX '(' expression ')'**
 * **expression : POSITIONY '(' expression ')'**
 
-### Conventions
+## Conventions
 
 * [x] Les mots clés réservés sont en PascalCase
 * [x] Les fichiers contenant du code Galapagos ont l'extension .galapagos
@@ -113,7 +116,7 @@ Notre language permettra la compilation vers du Javascript et offrira les possib
 
 -- <cite>Bouthiller de Beaumont, Capocasale, Freiburghaus: Galapagos in a turtle shell</cite>
 
-### Exemple de script
+## Exemple de script
 
 ```galapagos
 Galapagos g = 0, 10, 50, 50;  // Definis une zone pour une tortue
@@ -137,10 +140,28 @@ Tq positionY(t) < 20
 };
 ```
 
-## Historique des changements
+# Historique des changements
 
 * positionX t -> positionX(t)
 * positionY t -> postionY(t)
+
+# Spécificité du language
+* Mettre ici tout les fonctionnalités unique à notre projet
+
+## Partie Avant
+### Analyse sémantique
+## Partie Arrière
+###  Génération de code
+Notre programme génére du code javascript à partir de l'arbre syntaxique en entré. Dans le fichier du compilateur, une fonction corresponds à un noeud de l'arbre. La fonction génére du code javascript selon le type de noeud. La génération du code est effectué de manière récursive en partant du bas de l'arbre. Les noeuds en bas de l'arbre sont exécuté et remonte petit à petit en haut de l'arbre.
+
+Le code est généré dans le fichier ``outputs/compiled_code.js``. En plus du code provenant de l'arbre, ce fichier contient également du code javascript supplémentaire pour faire le lien avec le canvas HTML et pour les animations. Lors de la compilation, le compilateur va directement utilsé des objets javascript défini au préalable dans ``outputs/galapagos_lib/js``. Dans ce dossier se trouve plusieurs fichiers javascript définissant différentes classes. Ces classes représente nottamment une tortue et un galapagos (au sens javascript) et permettent d'effectuer des actions avec ces objets.
+
+Le code résultant de la compilation doit donc être executé dans une page HTML. Dans le dossier ``outputs/`` se trouve également un fichier ``Galapagos.html`` qui va exécuté le code se trouvant dans ``compiled_code.js``. Normalement le fichier ``Galapagos.html`` s'ouvre automatiquement à la fin de la compilation.
+
+### Animation
+Lors de la génération de code, les différents déplacement de la tortue sont déposés dans une queue (coté javascript). Une fois le fichier ``Galapagos.html`` lancé, les animations dans la queue vont être exécuté dans l'ordre une par une. Un interval fixe est défini entre chaque exécution d'un mouvement de la tortue. Ceci pour donner un effet d'animation.
+
+# Conclusion
 
 ## TODO
 
