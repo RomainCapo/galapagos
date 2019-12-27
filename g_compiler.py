@@ -109,7 +109,7 @@ if __name__ == "__main__":
         print("\twrote ast to", path_name)
 
         print("\n## SEMANTIC: start\n")
-        ast.semantic(DEBUG)
+        #ast.semantic(DEBUG)
         print("## SEMANTIC: end - success\n")
 
         compiled = "let context = document.getElementById('canvas').getContext('2d');\n"

@@ -6,7 +6,7 @@ class Turtle
 		this.galapagos = galapagos;
 		this.posX = startPosX;
 		this.posY = startPosY;
-		this.angle = this._degToRad(-startAngle);
+		this.angle = this._degToRad(startAngle);
 		this.isGrounded = true;
 		this.turtleImage = document.getElementById("turtle_image");
 		this.nbDrawnTurtle = 0;
@@ -51,6 +51,8 @@ class Turtle
 		this.context.strokeStyle = '#000000';
 		this.context.beginPath();
 		this.context.moveTo(this.posX, this.posY);
+		console.log(this.posX)
+		console.log(this.posY)
 		this.posX += distance * Math.cos(this.angle);
 		this.posY += distance * Math.sin(this.angle);
 		this.context.lineTo(this.posX, this.posY)
@@ -67,11 +69,11 @@ class Turtle
 	}
 
 	getPosX(){
-		return this.posX - this.galapagos.posX;
+		return this.posX;
 	}
 
 	getPosY(){
-		return this.posY - this.galapagos.posY;
+		return this.posY;
 	}
 
 	_degToRad(deg){

@@ -68,10 +68,11 @@ def check_type(identifiers, main_type):
 
     Example with "Tortue t = g 10 10 0;":
         identifiers: [g, 10, 10, 0]
-        main_type: Tortue
-    '''
+        main_type: Tortue'''
+    
 
     for i, identifier in enumerate(identifiers):
+        print(identifier.compile())
         if identifier.compile() not in cache:
             if type(identifier.compile()) not in allowed_types[main_type][i]:
                 print(f"\n\t Warning : Instruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
