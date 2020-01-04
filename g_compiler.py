@@ -126,50 +126,50 @@ if __name__ == "__main__":
     logger.setLevel(debug_level)
     #logger.addHandler(logging.StreamHandler())
 
-    #try:
-    # DEBUG = True if len(sys.argv) == 3 and sys.argv[2].upper() == 'DEBUG' else False
-    # TODO : Get log level as cli argument
-    # TODO : Set open web as cli argument
-    BASE_DIR = "outputs/pdf/"
+    try:
+        # DEBUG = True if len(sys.argv) == 3 and sys.argv[2].upper() == 'DEBUG' else False
+        # TODO : Get log level as cli argument
+        # TODO : Set open web as cli argument
+        BASE_DIR = "outputs/pdf/"
 
-    prog = open(file_path).read()
-    logger.info("\n## PARSING: start")
-    ast = parse(prog)
+        prog = open(file_path).read()
+        logger.info("\n## PARSING: start")
+        ast = parse(prog)
 
-    graph = ast.makegraphicaltree()
+        graph = ast.makegraphicaltree()
 
-    path_name = BASE_DIR + os.path.splitext(sys.argv[1])[0].split("/")[-1] + '-ast.pdf'
-    graph.write_pdf(path_name)
-    logger.debug(f"{ast}")
-    logger.info("## PARSING: end - success")
-    logger.info(f"wrote ast to : {path_name}")
+        path_name = BASE_DIR + os.path.splitext(sys.argv[1])[0].split("/")[-1] + '-ast.pdf'
+        graph.write_pdf(path_name)
+        logger.debug(f"{ast}")
+        logger.info("## PARSING: end - success")
+        logger.info(f"wrote ast to : {path_name}")
 
-    logger.info("## SEMANTIC: start")
-    ast.semantic()
-    logger.info("## SEMANTIC: end - success")
+        logger.info("## SEMANTIC: start")
+        ast.semantic()
+        logger.info("## SEMANTIC: end - success")
 
-    compiled = "let context = document.getElementById('canvas').getContext('2d');\n"
-    compiled += "let animator = new Animator();\n"
-    logger.info("## COMPILER: start")
-    compiled += ast.compile()
-    compiled += "animator.animate(null);"
-    logger.debug(compiled)
-    logger.info("## COMPILER: end - success")
+        compiled = "let context = document.getElementById('canvas').getContext('2d');\n"
+        compiled += "let animator = new Animator();\n"
+        logger.info("## COMPILER: start")
+        compiled += ast.compile()
+        compiled += "animator.animate(null);"
+        logger.debug(compiled)
+        logger.info("## COMPILER: end - success")
 
-    BASE_OUTPUT_DIR = "outputs/"
-    OUTPUT_FILENAME = "compiled_code.js"
-    name = BASE_OUTPUT_DIR + OUTPUT_FILENAME
-    outfile = open(name, 'w')
-    outfile.write(compiled)
-    outfile.close()
-    logger.info(f"Wrote code to : {name}")
+        BASE_OUTPUT_DIR = "outputs/"
+        OUTPUT_FILENAME = "compiled_code.js"
+        name = BASE_OUTPUT_DIR + OUTPUT_FILENAME
+        outfile = open(name, 'w')
+        outfile.write(compiled)
+        outfile.close()
+        logger.info(f"Wrote code to : {name}")
 
-    if run_browser:
-        logger.info("Opening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
-        import webbrowser
-        webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
+        if run_browser:
+            logger.info("Opening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
+            import webbrowser
+            webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
 
-    sys.exit(0)
-    #except BaseException as be:
-    #    logger.error(be)
-    #    sys.exit(1)
+        sys.exit(0)
+    except BaseException as be:
+        logger.error(be)
+        sys.exit(1)
