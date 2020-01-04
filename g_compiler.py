@@ -2,6 +2,8 @@ import AST
 from AST import addToClass
 from g_parser import parse
 from g_semantic import semantic
+import logging
+import argparse
 
 @addToClass(AST.ProgramNode)
 def compile(self):
@@ -85,38 +87,72 @@ def compile(self):
     js_code += "}"
     return js_code
 
+def read_cli_args():
+    LOGGER_LEVELS = [
+        logging.NOTSET,
+        logging.DEBUG,
+        logging.INFO,
+        logging.WARNING,
+        logging.ERROR,
+        logging.CRITICAL
+    ]
+
+    parser = argparse.ArgumentParser(description='Compile a galapagos code file')
+    parser.add_argument('-d', '--debug-level', required=False, type=int, choices=range(0, 6),
+                        default=5,
+                        help="""logger level : \n
+                        [0] -> NOTSET \n
+                        [1] -> DEBUG \n
+                        [2] -> INFO \n
+                        [3] -> WARNING \n
+                        [4] -> ERROR \n
+                        [5] -> CRITICAL""")
+    parser.add_argument('-r', '--run', required=False, default=False, help='run the input code', action='store_true')
+    parser.add_argument('-f', '--file', required=True, help="input file path")
+
+    args = parser.parse_args()
+    return LOGGER_LEVELS[args.debug_level], args.file, args.run
 
 
 if __name__ == "__main__":
     import sys, os
 
+    debug_level, file_path, run_browser = read_cli_args()
+    print(debug_level)
+    logging.basicConfig()
+    logger = logging.getLogger('compiler')
+    logger.setLevel(debug_level)
+    #logger.addHandler(logging.StreamHandler())
+
     try:
-        DEBUG = True if len(sys.argv) == 3 and sys.argv[2].upper() == 'DEBUG' else False
+        # DEBUG = True if len(sys.argv) == 3 and sys.argv[2].upper() == 'DEBUG' else False
+        # TODO : Get log level as cli argument
+        # TODO : Set open web as cli argument
         BASE_DIR = "outputs/pdf/"
 
-        prog = open(sys.argv[1]).read()
-        print("\n## PARSING: start")
+        prog = open(file_path).read()
+        logger.info("\n## PARSING: start")
         ast = parse(prog)
 
         graph = ast.makegraphicaltree()
 
         path_name = BASE_DIR + os.path.splitext(sys.argv[1])[0].split("/")[-1] + '-ast.pdf'
         graph.write_pdf(path_name)
-        print("\n"+str(ast)) if DEBUG else 0
-        print("\n## PARSING: end - success")
-        print("\twrote ast to", path_name)
+        logger.debug(f"{ast}")
+        logger.info("## PARSING: end - success")
+        logger.info(f"wrote ast to : {path_name}")
 
-        print("\n## SEMANTIC: start\n")
-        ast.semantic(DEBUG)
-        print("## SEMANTIC: end - success\n")
+        logger.info("## SEMANTIC: start")
+        ast.semantic()
+        logger.info("## SEMANTIC: end - success")
 
         compiled = "let context = document.getElementById('canvas').getContext('2d');\n"
         compiled += "let animator = new Animator();\n"
-        print("\n## COMPILER: start\n")
+        logger.info("## COMPILER: start")
         compiled += ast.compile()
         compiled += "animator.animate(null);"
-        print(compiled) if DEBUG else 0
-        print("## COMPILER: end - success")
+        logger.debug(compiled)
+        logger.info("## COMPILER: end - success")
 
         BASE_OUTPUT_DIR = "outputs/"
         OUTPUT_FILENAME = "compiled_code.js"
@@ -124,11 +160,14 @@ if __name__ == "__main__":
         outfile = open(name, 'w')
         outfile.write(compiled)
         outfile.close()
-        print ("\tWrote code to", name)
+        logger.info(f"Wrote code to : {name}")
 
-        print("\nOpening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
-        import webbrowser
-        webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
+        if run_browser:
+            logger.info("Opening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
+            import webbrowser
+            webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
+
         sys.exit(0)
     except BaseException as be:
+        logger.error(be)
         sys.exit(1)

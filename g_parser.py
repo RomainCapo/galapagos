@@ -2,6 +2,9 @@ import ply.yacc as yacc
 from g_lexer import tokens
 import AST
 import os
+import logging
+
+logger = logging.getLogger('compiler')
 
 vars = {}
 
@@ -86,7 +89,7 @@ def p_statement_position_y(p):
 
 def p_error(p):
     if p:
-        print(f"Syntax error in line {p.lineno}")
+        logger.error(f"Syntax error in line {p.lineno}")
         parser.errok()
         raise Exception(f'''\n\nError in line {p.lineno}: Incorrect {p.type}: '{p.value}'.\nMaybe you should check the number of arguments you wrote, or maybe you forgot to end with ';', or maybe it's something else, idk...''')
     else:
