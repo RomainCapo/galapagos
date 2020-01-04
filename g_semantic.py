@@ -106,7 +106,7 @@ def semantic(self):
 @addToClass(AST.AssignNode)
 def semantic(self):
     logger.debug(f"Assign node\n\t {self.children}\n")
-    assign_cache(self.children[0].tok[0], self.children[0].tok[1]) #example: assign_cache(Tortue, t)
+    assign_cache(self.children) #example: assign_cache(Tortue, t)
     check_type(self.children[1:], self.children[0].tok[0]) #example: check_type([0, 10, 50, 50], Galapagos)
 
 @addToClass(AST.AvancerNode)
