@@ -1,11 +1,13 @@
 from math import cos, sin, pi
+import logging
+
+logger = logging.getLogger('compiler')
 
 class Bodyguard:
 
     def __init__(self):
         self.dict_turtle = {}
         self.dict_galapagos = {}
-        self.debug = False
 
     def add_galapagos(self, galapagos_name, galapagos):
         self.dict_galapagos[galapagos_name] = galapagos
@@ -18,16 +20,16 @@ class Bodyguard:
         galapagos = self.dict_galapagos[turtle.g]
 
         if self._is_in_galapagos(galapagos, turtle):
-            print(f"Safe: Turtle '{turtle.name}' stayed inside galapagos") if self.debug else 0
+            logger.debug(f"Safe: Turtle '{turtle.name}' stayed inside galapagos")
         else:
-            print("Error: out of galapagos") if self.debug else 0
+            logger.debug("Error: out of galapagos")
             raise Exception(f"Error: Turtle '{turtle.name}' (x: {int(turtle.x)}; y: {int(turtle.y)}) went out of galapagos {turtle.g}")
 
         if self._is_colliding(turtle):
-            print("Error: Collision between turtles") if self.debug else 0
+            logger.debug("Error: Collision between turtles")
             raise Exception(f"Error: turtle '{turtle.name}' (x: {int(turtle.x)}; y: {int(turtle.y)}) collided")
         else:
-            print("No collision") if self.debug else 0
+            logger.debug("No collision")
 
     def _is_in_galapagos(self, galapagos, turtle):
         return turtle.x >= galapagos.x and turtle.x <= galapagos.x + galapagos.width \
@@ -61,19 +63,19 @@ class Turtle(Observable):
         self.x = x
         self.y = y
         self.alpha = alpha
-    
+
     def move_straight(self, distance):
         self.x += distance * cos(self.alpha)
         self.y += distance * sin(self.alpha)
         self.notify_observer()
-    
+
     def move_back(self, distance):
         self.move_straight(-distance)
         self.notify_observer()
-    
+
     def turn_right(self, angle):
         self.alpha -= -angle * (pi/180)
-    
+
     def turn_left(self, angle):
         self.alpha += -angle * (pi/180)
 

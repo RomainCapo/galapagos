@@ -1,5 +1,8 @@
 import ply.lex as lex
 import sys
+import logging
+
+logger = logging.getLogger('compiler')
 
 reserved_words = (
     'SI',
@@ -58,7 +61,7 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
 
 def t_error(t):
-    print(f"Illegal character {repr(t.value[0])}")
+    logger.error(f"Illegal character {repr(t.value[0])}")
     sys.exit(1)
 
 t_ignore = ' \t'
