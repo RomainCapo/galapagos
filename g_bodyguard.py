@@ -1,3 +1,8 @@
+from math import cos, sin, pi
+import logging
+
+logger = logging.getLogger('compiler')
+
 class Bodyguard:
 
     def __init__(self):
@@ -15,14 +20,16 @@ class Bodyguard:
         galapagos = self.dict_galapagos[turtle.g]
 
         if self._is_in_galapagos(galapagos, turtle):
-            print("In galapagos")
+            logger.debug(f"Safe: Turtle '{turtle.name}' stayed inside galapagos")
         else:
-            print("Out galapagos")
+            logger.debug("Error: out of galapagos")
+            raise Exception(f"Error: Turtle '{turtle.name}' (x: {int(turtle.x)}; y: {int(turtle.y)}) went out of galapagos {turtle.g}")
 
         if self._is_colliding(turtle):
-            print("Is colliding")
+            logger.debug("Error: Collision between turtles")
+            raise Exception(f"Error: turtle '{turtle.name}' (x: {int(turtle.x)}; y: {int(turtle.y)}) collided")
         else:
-            print("No collision")
+            logger.debug("No collision")
 
     def _is_in_galapagos(self, galapagos, turtle):
         return turtle.x >= galapagos.x and turtle.x <= galapagos.x + galapagos.width \
@@ -49,38 +56,48 @@ class Observable:
 
 class Turtle(Observable):
 
-    def __init__(self, x, y, alpha, g):
+    def __init__(self, name, g, x, y, alpha):
         super(Turtle, self).__init__()
+        self.name = name
+        self.g = g
         self.x = x
         self.y = y
         self.alpha = alpha
 
-        self.g = g
-
-    def update_pos(self, pos):
-        self.x += pos
+    def move_straight(self, distance):
+        self.x += distance * cos(self.alpha)
+        self.y += distance * sin(self.alpha)
         self.notify_observer()
+
+    def move_back(self, distance):
+        self.move_straight(-distance)
+        self.notify_observer()
+
+    def turn_right(self, angle):
+        self.alpha -= -angle * (pi/180)
+
+    def turn_left(self, angle):
+        self.alpha += -angle * (pi/180)
+
+
+MIN_X = 0
+MIX_Y = 0
+MAX_WIDTH = 1000
+MAX_HEIGHT = 500
 
 class Galapagos:
 
     def __init__(self, x, y, width, height):
+        '''
+        if x + width <= MAX_WIDTH and y + height <= MAX_HEIGHT and x >= 0 and y >= 0 and width > 0 and height > 0:
+            self.x = x
+            self.y = y
+            self.width = width
+            self.height = height
+        else:
+            raise Exception("dimensions are wrong. chose anoter ones")
+        '''
         self.x = x
         self.y = y
         self.width = width
         self.height = height
-
-if __name__ == "__main__":
-    b = Bodyguard()
-
-    g = Galapagos(0, 0, 100, 100)
-    b.add_galapagos('g1', g)
-
-    t = Turtle(0, 0, 30, 'g1')
-    b.add_turtle("t1", t)
-
-    t.update_pos(80)
-
-    t2 = Turtle(0, 0, 30, 'g1')
-    b.add_turtle("t2", t2)
-
-    t2.update_pos(105)

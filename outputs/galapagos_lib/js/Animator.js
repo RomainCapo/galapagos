@@ -12,6 +12,8 @@ class Animator {
 	animate(animator){
 		if(this.animationStack.length == 0){
 			clearTimeout(animator);
+			document.getElementById("execution_info").innerHTML = 'Execution finished ! ';
+			document.getElementById("loader").style.display = 'None';
 			return;
 		}
 

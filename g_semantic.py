@@ -1,9 +1,13 @@
 import AST
 from AST import addToClass
+<<<<<<< HEAD
 from g_bodyguard import Bodyguard
 import logging
 
 logger = logging.getLogger('compiler')
+=======
+from g_bodyguard import Bodyguard, Galapagos, Turtle
+>>>>>>> 08ac974dfb128c585c1db615839389d7d9de9c2e
 
 '''
 DEV note:
@@ -19,11 +23,27 @@ if len(self.children) != 1:
 '''
 
 cache = {}
+bodyguard = Bodyguard()
+DEBUG = False
 
-def assign_cache(d_type, identifier):
-    ''' When a new variable is declared, add it to the dictionnary (cache). Raise an error if a variable with this name already exists. '''
+def assign_cache(children):
+    '''
+    When a new variable is declared, add it to the dictionnary (cache).
+    Raise an error if a variable with this name already exists.
+    '''
+
+    identifier = children[0].tok[1]
+    d_type = children[0].tok[0]
+    coords = children[1:]
+
     if identifier not in cache:
         cache[identifier] = d_type
+        if d_type == 'Galapagos':
+            galapagos = Galapagos(*[x.tok for x in coords])
+            bodyguard.add_galapagos(identifier, galapagos)
+        elif d_type == 'Tortue':
+            turtle = Turtle(identifier, *[x.tok for x in coords])
+            bodyguard.add_turtle(identifier, turtle)
     else:
         raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
 
@@ -53,15 +73,17 @@ def check_type(identifiers, main_type):
         main_type: Tortue
     '''
 
+
     for i, identifier in enumerate(identifiers):
-        if identifier.tok not in cache:
-            if type(identifier.tok) not in allowed_types[main_type][i]:
+        if identifier.compile() not in cache:
+            if type(identifier.compile()) not in allowed_types[main_type][i]:
                 raise Exception(f"\n\tInstruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
-                    f"\n\t'{identifier.tok}' ({type(identifier.tok) if type(identifier.tok) is not str else 'uknown identifier'}) given.")
+                    f"\n\t'{identifier.compile()}' ({type(identifier.compile()) if type(identifier.compile()) is not str else 'uknown identifier'}) given.")
         else:
-            if cache[identifier.tok] not in allowed_types[main_type][i]:
+            if cache[identifier.compile()] not in allowed_types[main_type][i]:
                 raise Exception(f"\n\tInstruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
-                    f"\n\t'{identifier.tok}' ({cache[identifier.tok]}) given.")
+                    f"\n\t'{identifier.compile()}' ({cache[identifier.compile()]}) given.")
+
 
 def visit_children(children):
     for child in children:
@@ -92,11 +114,13 @@ def semantic(self):
 def semantic(self):
     logger.debug(f"Avancer node\n\t {self.children}\n")
     check_type(self.children, 'Avancer') #example: check_type(['t', 10])
+    bodyguard.dict_turtle[self.children[0].tok].move_straight(self.children[1].tok) # checking if out of galapagos
 
 @addToClass(AST.ReculerNode)
 def semantic(self):
     logger.debug(f"Reculer node\n\t {self.children}\n")
     check_type(self.children, 'Reculer')
+    bodyguard.dict_turtle[self.children[0].tok].move_back(self.children[1].tok) # checking if out of galapagos
 
 @addToClass(AST.DecollerNode)
 def semantic(self):
@@ -112,11 +136,13 @@ def semantic(self):
 def semantic(self):
     logger.debug(f"Tourner gauche node\n\t {self.children}\n")
     check_type(self.children, 'TournerGauche')
+    bodyguard.dict_turtle[self.children[0].tok].turn_left(self.children[1].tok)
 
 @addToClass(AST.TournerDroiteNode)
 def semantic(self):
     logger.debug(f"Tourner droite node\n\t {self.children}\n")
     check_type(self.children, 'TournerDroite')
+    bodyguard.dict_turtle[self.children[0].tok].turn_right(self.children[1].tok)
 
 @addToClass(AST.PositionXNode)
 def semantic(self):
