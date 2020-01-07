@@ -32,16 +32,19 @@ def assign_cache(children):
     coords = children[1:]
 
     if identifier not in cache:
-        cache[identifier] = d_type
         if d_type == 'Galapagos':
             galapagos = Galapagos(*[x.tok for x in coords])
             bodyguard.add_galapagos(identifier, galapagos)
+            cache[identifier] = {"type" : d_type, "variable": galapagos}
         elif d_type == 'Tortue':
             turtle = Turtle(identifier, *[x.tok for x in coords])
             bodyguard.add_turtle(identifier, turtle)
+            cache[identifier] = {"type" : d_type, "variable": turtle}
         elif d_type == 'REASSIGN':
             if cache[identifier].upper().strip() != "Entier".upper().strip():
                 raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
+        elif d_type == "Entier":
+            cache[identifier] = {"type" : "Entier", "variable": coords[0]}
     else:
         raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
 
@@ -71,15 +74,13 @@ def check_type(identifiers, main_type):
         identifiers: [g, 10, 10, 0]
         main_type: Tortue'''
 
-
     for i, identifier in enumerate(identifiers):
-        print(identifier.compile())
         if identifier.compile() not in cache:
             if type(identifier.compile()) not in allowed_types[main_type][i]:
                 logger.warning(f"\n\t Warning : Instruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
-                    f"\n\t'{identifier.compile()}' ({type(identifier.compile()) if type(identifier.compile()) is not str else 'uknown identifier'}) given.")
+                    f"\n\t'{identifier.compile()}' ({type(identifier.compile()) if type(identifier.compile()) is not str else 'unknown identifier'}) given.")
         else:
-            if cache[identifier.compile()] not in allowed_types[main_type][i]:
+            if cache[identifier.compile()]["type"] not in allowed_types[main_type][i]:
                 logger.warning(f"\n\t Warning : Instruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
                     f"\n\t'{identifier.compile()}' ({cache[identifier.compile()]}) given.")
 
@@ -113,13 +114,19 @@ def semantic(self):
 def semantic(self):
     logger.debug(f"Avancer node\n\t {self.children}\n")
     check_type(self.children, 'Avancer') #example: check_type(['t', 10])
-    bodyguard.dict_turtle[self.children[0].tok].move_straight(self.children[1].tok) # checking if out of galapagos
+    if isinstance(self.children[1].tok, str):
+        bodyguard.dict_turtle[self.children[0].tok].move_straight(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+    else:
+        bodyguard.dict_turtle[self.children[0].tok].move_straight(self.children[1].tok)
 
 @addToClass(AST.ReculerNode)
 def semantic(self):
     logger.debug(f"Reculer node\n\t {self.children}\n")
     check_type(self.children, 'Reculer')
-    bodyguard.dict_turtle[self.children[0].tok].move_back(self.children[1].tok) # checking if out of galapagos
+    if isinstance(self.children[1].tok, str):
+        bodyguard.dict_turtle[self.children[0].tok].move_back(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+    else:
+        bodyguard.dict_turtle[self.children[0].tok].move_back(self.children[1].tok)
 
 @addToClass(AST.DecollerNode)
 def semantic(self):
@@ -135,13 +142,19 @@ def semantic(self):
 def semantic(self):
     logger.debug(f"Tourner gauche node\n\t {self.children}\n")
     check_type(self.children, 'TournerGauche')
-    bodyguard.dict_turtle[self.children[0].tok].turn_left(self.children[1].tok)
+    if isinstance(self.children[1].tok, str):
+        bodyguard.dict_turtle[self.children[0].tok].turn_left(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+    else:
+        bodyguard.dict_turtle[self.children[0].tok].turn_left(self.children[1].tok)
 
 @addToClass(AST.TournerDroiteNode)
 def semantic(self):
     logger.debug(f"Tourner droite node\n\t {self.children}\n")
     check_type(self.children, 'TournerDroite')
-    bodyguard.dict_turtle[self.children[0].tok].turn_right(self.children[1].tok)
+    if isinstance(self.children[1].tok, str):
+        bodyguard.dict_turtle[self.children[0].tok].turn_right(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+    else:
+        bodyguard.dict_turtle[self.children[0].tok].turn_right(self.children[1].tok)
 
 @addToClass(AST.PositionXNode)
 def semantic(self):
