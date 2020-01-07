@@ -1,0 +1,20 @@
+Galapagos g1 = 10 10 500 300; // Definis une zone pour une tortue
+Galapagos g2 = 750 100 300 300; // Definis une zone pour une tortue
+
+Tortue t1 = g1 50 50 90; // Cree une tortue dans la zone g
+Tortue t2 = g2 850 120 90; // Cree une tortue dans la zone g
+
+Avancer t2 100;
+Entier a = 0;
+
+Tq a < 3
+{
+	a = a + 1;
+
+	Si PositionY(t2) > 5
+	{
+		Avancer t2 55;
+	};
+	Avancer t1 70;
+	TournerGauche t1 90;
+};

@@ -1,0 +1,16 @@
+Galapagos g = 10 10 500 300;  // Definis une zone pour une tortue
+Tortue t = g 50 50 0; // Cree une tortue dans la zone g
+
+Entier a = 100;
+
+Avancer t a;
+TournerDroite t 90;
+
+Decoller t;
+Avancer t 50;
+Atterrir t;
+
+a = 50;
+
+TournerGauche t 30;
+Avancer t a;
