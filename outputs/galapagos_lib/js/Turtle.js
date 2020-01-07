@@ -51,8 +51,6 @@ class Turtle
 		this.context.strokeStyle = '#000000';
 		this.context.beginPath();
 		this.context.moveTo(this.posX, this.posY);
-		console.log(this.posX)
-		console.log(this.posY)
 		this.posX += distance * Math.cos(this.angle);
 		this.posY += distance * Math.sin(this.angle);
 		this.context.lineTo(this.posX, this.posY)
@@ -63,7 +61,7 @@ class Turtle
 	}
 
 	moveBack(distance){
-    this._deleteTurtle();
+    	this._deleteTurtle();
 		this.moveStraight(-distance);
 		this._drawTurtlePos();
 	}
