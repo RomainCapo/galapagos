@@ -32,7 +32,13 @@ def assign_cache(children):
     coords = children[1:]
 
     if identifier in cache:
-        raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
+        if d_type == 'REASSIGN':
+            if cache[identifier]['type'].upper().strip() != "Entier".upper().strip():
+                raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
+            else:
+                cache[identifier]['variable'] = coords[0]
+        else:
+            raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
     else:
         if d_type == 'Galapagos':
             galapagos = Galapagos(*[x.tok for x in coords])
@@ -42,9 +48,6 @@ def assign_cache(children):
             turtle = Turtle(identifier, *[x.tok for x in coords])
             bodyguard.add_turtle(identifier, turtle)
             cache[identifier] = {"type" : d_type, "variable": turtle}
-        elif d_type == 'REASSIGN':
-            if cache[identifier].upper().strip() != "Entier".upper().strip():
-                raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
         elif d_type == "Entier":
             cache[identifier] = {"type" : "Entier", "variable": coords[0]}
 
@@ -83,7 +86,6 @@ def check_type(identifiers, main_type):
             if type(identifier.compile()) not in allowed_types[main_type][i]:
                 logger.warning(f"\n\t Warning : Instruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
                     f"\n\t'{identifier.compile()}' ({type(identifier.compile()) if type(identifier.compile()) is not str else 'unknown identifier'}) given.")
-
 
 
 def visit_children(children):
