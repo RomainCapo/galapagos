@@ -65,8 +65,8 @@ class Turtle(Observable):
         self.alpha = alpha
 
     def move_straight(self, distance):
-        self.x += distance * cos(self.alpha)
-        self.y += distance * sin(self.alpha)
+        self.x += distance * cos(self.alpha * (pi/180))
+        self.y += distance * sin(self.alpha * (pi/180))
         self.notify_observer()
 
     def move_back(self, distance):
