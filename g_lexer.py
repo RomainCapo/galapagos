@@ -46,15 +46,8 @@ def t_COMMENTS(t):
     # Pas de retourne car non utilisé par l'analyseur syntaxique
 
 def t_ALGEBRAIC_OP(t):
-    r'[><+\-*/]'
+    r'[><\+\-\*\/]'
     return t
-
-def t_ADD_OP(t):
-	r'[+-]'
-	return t
-
-def t_MUL_OP(t):
-	r'[*/]'
 
 def t_newline(t):
     r'\n+'

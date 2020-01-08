@@ -8,13 +8,6 @@ logger = logging.getLogger('compiler')
 
 vars = {}
 
-operations = {
-        '>' : lambda x, y: x > y,
-        '<' : lambda x, y: x < y,
-        '+' : lambda x, y: x + y,
-        '-' : lambda x, y: x - y,
-    }
-
 def p_programme_statement(p):
     '''programme : statement ';' '''
     p[0] = AST.ProgramNode(p[1])
