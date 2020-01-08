@@ -145,7 +145,7 @@ if __name__ == "__main__":
         logger.info(f"wrote ast to : {path_name}")
 
         logger.info("## SEMANTIC: start")
-        #ast.semantic()
+        ast.semantic()
         logger.info("## SEMANTIC: end - success")
 
         compiled = "let context = document.getElementById('canvas').getContext('2d');\n"

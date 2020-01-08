@@ -40,11 +40,13 @@ def assign_cache(children):
             turtle = Turtle(identifier, *[x.tok for x in coords])
             bodyguard.add_turtle(identifier, turtle)
             cache[identifier] = {"type" : d_type, "variable": turtle}
-        elif d_type == 'REASSIGN':
-            if cache[identifier].upper().strip() != "Entier".upper().strip():
-                raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
         elif d_type == "Entier":
             cache[identifier] = {"type" : "Entier", "variable": coords[0]}
+    elif d_type == 'REASSIGN':
+        if cache[identifier]['type'].upper().strip() != "Entier".upper().strip():
+            raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
+        else:
+            cache[identifier]['variable'] = coords[0]
     else:
         raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
 
