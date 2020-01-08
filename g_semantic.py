@@ -95,6 +95,16 @@ def check_type(identifiers, main_type):
                     f"\n\t'{identifier.compile()}' ({type(identifier.compile()) if type(identifier.compile()) is not str else 'unknown identifier'}) given.")
 
 
+def eval_op_node(node):
+    if isinstance(node.children[1], AST.OpNode):
+        right_value = node.children[1]
+        left_value = node.children[0].compile()
+        return operations[node.op](left_value, eval_op_node(right_value))
+
+    left_value = node.children[0].compile()
+    right_value = node.children[1].compile()
+    return operations[node.op](left_value, right_value)
+
 def visit_children(children):
     for child in children:
         child.semantic()
@@ -126,10 +136,12 @@ def semantic(self):
     check_type(self.children, 'Avancer') #example: check_type(['t', 10])
 
     if isinstance(self.children[1], AST.OpNode):
-        left_value = self.children[1].children[0].compile()
+        """"left_value = self.children[1].children[0].compile()
         right_value = self.children[1].children[1].compile()
         eval = operations[self.children[1].op](left_value, right_value)
-        bodyguard.dict_turtle[self.children[0].tok].move_straight(eval)
+        bodyguard.dict_turtle[self.children[0].tok].move_straight(eval)"""
+        print("SHOULD EVAL")
+        eval = eval_op_node(self.children[1])
     else:
         if isinstance(self.children[1].tok, str):
             bodyguard.dict_turtle[self.children[0].tok].move_straight(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
