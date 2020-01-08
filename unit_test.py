@@ -9,11 +9,11 @@ class TestCompilerMethods(unittest.TestCase):
 
     def test_lexer(self):
         BASE_PATH = "inputs"
-        test_files = [os.path.join(BASE_PATH, file) for file in os.listdir() if file.endswith(".txt")]
+        test_files = [BASE_PATH + "/" + file for file in os.listdir(BASE_PATH) if file.endswith(".galapagos")]
 
         return_codes = []
         for file in test_files:
-            sp = subprocess.Popen(['python', 'g_compiler.py', file], stdout=subprocess.PIPE)
+            sp = subprocess.Popen(['python', 'g_compiler.py', "-f", file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             streamdata = sp.communicate()[0]
             return_codes.append(sp.returncode)
 

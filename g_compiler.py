@@ -170,11 +170,12 @@ if __name__ == "__main__":
         logger.info(f"Wrote code to : {name}")
 
         if run_browser:
-            logger.info("Opening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
             import webbrowser
+            logger.info("Opening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
             webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
 
-        sys.exit(0)
     except BaseException as be:
         logger.error(be)
         sys.exit(1)
+
+    sys.exit(0)
