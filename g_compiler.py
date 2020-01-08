@@ -143,7 +143,7 @@ if __name__ == "__main__":
         if not os.path.exists(BASE_DIR):
             os.makedirs(BASE_DIR)
 
-        path_name = BASE_DIR + os.path.splitext(sys.argv[1])[0].split("/")[-1] + '-ast.pdf'
+        path_name = BASE_DIR + os.path.splitext(file_path)[0].split("/")[-1] + '-ast.pdf'
         graph.write_pdf(path_name)
         logger.debug(f"{ast}")
         logger.info("## PARSING: end - success")

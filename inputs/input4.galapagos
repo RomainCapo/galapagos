@@ -17,5 +17,5 @@ Avancer t2 a;
 TournerGauche t1 b;
 TournerDroite t2 b;
 
-Avancer t1 a + 20;
-Avancer t2 a - 50;
+Avancer t1 10 + 20;
+Avancer t2 20 - 50;
