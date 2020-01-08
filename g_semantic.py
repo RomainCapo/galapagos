@@ -3,6 +3,13 @@ from AST import addToClass
 from g_bodyguard import Bodyguard, Galapagos, Turtle
 import logging
 
+operations = {
+        '>' : lambda x, y: x > y,
+        '<' : lambda x, y: x < y,
+        '+' : lambda x, y: x + y,
+        '-' : lambda x, y: x - y,
+    }
+
 logger = logging.getLogger('compiler')
 
 '''
@@ -117,19 +124,33 @@ def semantic(self):
 def semantic(self):
     logger.debug(f"Avancer node\n\t {self.children}\n")
     check_type(self.children, 'Avancer') #example: check_type(['t', 10])
-    if isinstance(self.children[1].tok, str):
-        bodyguard.dict_turtle[self.children[0].tok].move_straight(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+
+    if isinstance(self.children[1], AST.OpNode):
+        left_value = self.children[1].children[0].compile()
+        right_value = self.children[1].children[1].compile()
+        eval = operations[self.children[1].op](left_value, right_value)
+        bodyguard.dict_turtle[self.children[0].tok].move_straight(eval)
     else:
-        bodyguard.dict_turtle[self.children[0].tok].move_straight(self.children[1].tok)
+        if isinstance(self.children[1].tok, str):
+            bodyguard.dict_turtle[self.children[0].tok].move_straight(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+        else:
+            bodyguard.dict_turtle[self.children[0].tok].move_straight(self.children[1].tok)
 
 @addToClass(AST.ReculerNode)
 def semantic(self):
     logger.debug(f"Reculer node\n\t {self.children}\n")
     check_type(self.children, 'Reculer')
-    if isinstance(self.children[1].tok, str):
-        bodyguard.dict_turtle[self.children[0].tok].move_back(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+
+    if isinstance(self.children[1], AST.OpNode):
+        left_value = self.children[1].children[0].compile()
+        right_value = self.children[1].children[1].compile()
+        eval = operations[self.children[1].op](left_value, right_value)
+        bodyguard.dict_turtle[self.children[0].tok].move_back(eval)
     else:
-        bodyguard.dict_turtle[self.children[0].tok].move_back(self.children[1].tok)
+        if isinstance(self.children[1].tok, str):
+            bodyguard.dict_turtle[self.children[0].tok].move_back(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+        else:
+            bodyguard.dict_turtle[self.children[0].tok].move_back(self.children[1].tok)
 
 @addToClass(AST.DecollerNode)
 def semantic(self):
@@ -145,19 +166,33 @@ def semantic(self):
 def semantic(self):
     logger.debug(f"Tourner gauche node\n\t {self.children}\n")
     check_type(self.children, 'TournerGauche')
-    if isinstance(self.children[1].tok, str):
-        bodyguard.dict_turtle[self.children[0].tok].turn_left(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+
+    if isinstance(self.children[1], AST.OpNode):
+        left_value = self.children[1].children[0].compile()
+        right_value = self.children[1].children[1].compile()
+        eval = operations[self.children[1].op](left_value, right_value)
+        bodyguard.dict_turtle[self.children[0].tok].turn_left(eval)
     else:
-        bodyguard.dict_turtle[self.children[0].tok].turn_left(self.children[1].tok)
+        if isinstance(self.children[1].tok, str):
+            bodyguard.dict_turtle[self.children[0].tok].turn_left(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+        else:
+            bodyguard.dict_turtle[self.children[0].tok].turn_left(self.children[1].tok)
 
 @addToClass(AST.TournerDroiteNode)
 def semantic(self):
     logger.debug(f"Tourner droite node\n\t {self.children}\n")
     check_type(self.children, 'TournerDroite')
-    if isinstance(self.children[1].tok, str):
-        bodyguard.dict_turtle[self.children[0].tok].turn_right(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+
+    if isinstance(self.children[1], AST.OpNode):
+        left_value = self.children[1].children[0].compile()
+        right_value = self.children[1].children[1].compile()
+        eval = operations[self.children[1].op](left_value, right_value)
+        bodyguard.dict_turtle[self.children[0].tok].turn_right(eval)
     else:
-        bodyguard.dict_turtle[self.children[0].tok].turn_right(self.children[1].tok)
+        if isinstance(self.children[1].tok, str):
+            bodyguard.dict_turtle[self.children[0].tok].turn_right(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
+        else:
+            bodyguard.dict_turtle[self.children[0].tok].turn_right(self.children[1].tok)
 
 @addToClass(AST.PositionXNode)
 def semantic(self):
