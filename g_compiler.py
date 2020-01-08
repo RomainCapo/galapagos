@@ -89,6 +89,12 @@ def compile(self):
     js_code += "}"
     return js_code
 
+
+def is_valid_file(file):
+    if not file.endswith(".galapagos"):
+        raise argparse.ArgumentTypeError('File must have a galapagos extension')
+    return file
+
 def read_cli_args():
     LOGGER_LEVELS = [
         logging.NOTSET,
@@ -110,7 +116,7 @@ def read_cli_args():
                         [4] -> ERROR \n
                         [5] -> CRITICAL""")
     parser.add_argument('-r', '--run', required=False, default=False, help='run the input code', action='store_true')
-    parser.add_argument('-f', '--file', required=True, help="input file path")
+    parser.add_argument('-f', '--file', required=True, help="input file path", type=is_valid_file)
 
     args = parser.parse_args()
     return LOGGER_LEVELS[args.debug_level], args.file, args.run
@@ -120,16 +126,12 @@ if __name__ == "__main__":
     import sys, os
 
     debug_level, file_path, run_browser = read_cli_args()
-    print(debug_level)
+
     logging.basicConfig()
     logger = logging.getLogger('compiler')
     logger.setLevel(debug_level)
-    #logger.addHandler(logging.StreamHandler())
 
     try:
-        # DEBUG = True if len(sys.argv) == 3 and sys.argv[2].upper() == 'DEBUG' else False
-        # TODO : Get log level as cli argument
-        # TODO : Set open web as cli argument
         BASE_DIR = "outputs/pdf/"
 
         prog = open(file_path).read()
@@ -137,6 +139,9 @@ if __name__ == "__main__":
         ast = parse(prog)
 
         graph = ast.makegraphicaltree()
+
+        if not os.path.exists(BASE_DIR):
+            os.makedirs(BASE_DIR)
 
         path_name = BASE_DIR + os.path.splitext(sys.argv[1])[0].split("/")[-1] + '-ast.pdf'
         graph.write_pdf(path_name)
