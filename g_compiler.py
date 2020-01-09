@@ -18,7 +18,6 @@ def compile(self):
 
 @addToClass(AST.OpNode)
 def compile(self):
-
     return "{0} {1} {2}".format(self.children[0].compile(), self.op, self.children[1].compile())
 
 @addToClass(AST.AssignNode)

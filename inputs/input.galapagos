@@ -4,4 +4,4 @@ Entier b = 102;
 Entier a = 20;
 a = 200;
 
-Avancer t 100 / 5 + a - 100 + b * 1;
+Avancer t 100 + a + 20 / 2;
