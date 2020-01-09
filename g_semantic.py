@@ -1,5 +1,5 @@
 import AST
-from AST import addToClass, OpNode
+from AST import addToClass, TokenNode
 from g_bodyguard import Bodyguard, Galapagos, Turtle
 import logging
 
@@ -148,10 +148,6 @@ def semantic(self):
 @addToClass(AST.TokenNode)
 def semantic(self):
     logger.debug(f"Token node\n\t {self.children}\n")
-    if isinstance(self.tok, list):
-        if self.tok[0] == "Entier":
-            val = eval_node_recursively(self)
-            print("IS entier", val)
     visit_children(self.children)
 
 @addToClass(AST.OpNode)
@@ -174,16 +170,23 @@ def semantic(self):
 def semantic(self):
     logger.debug(f"Avancer node\n\t {self.children}\n")
     visit_children(self.children)
-    print("CHILDREN :", self.children[1].__dict__)
     check_type(self.children, 'Avancer')
+
+    if type(self.children[1]) == TokenNode:
+        if self.children[1].tok in cache:
+            self.children[1].tok = cache[self.children[1].tok]["variable"].compile()
     bodyguard.dict_turtle[self.children[0].tok].move_straight(self.children[1].tok)
 
 @addToClass(AST.ReculerNode)
 def semantic(self):
     logger.debug(f"Reculer node\n\t {self.children}\n")
-
-    check_type(self.children, 'Reculer')
     visit_children(self.children)
+    check_type(self.children, 'Reculer')
+
+    if type(self.children[1]) == TokenNode:
+        if self.children[1].tok in cache:
+            self.children[1].tok = cache[self.children[1].tok]["variable"].compile()
+
     bodyguard.dict_turtle[self.children[0].tok].move_back(self.children[1].tok)
 
 @addToClass(AST.DecollerNode)
@@ -199,17 +202,25 @@ def semantic(self):
 @addToClass(AST.TournerGaucheNode)
 def semantic(self):
     logger.debug(f"Tourner gauche node\n\t {self.children}\n")
-
-    check_type(self.children, 'TournerGauche')
     visit_children(self.children)
+    check_type(self.children, 'TournerGauche')
+
+    if type(self.children[1]) == TokenNode:
+        if self.children[1].tok in cache:
+            self.children[1].tok = cache[self.children[1].tok]["variable"].compile()
+
     bodyguard.dict_turtle[self.children[0].tok].turn_left(self.children[1].tok)
 
 @addToClass(AST.TournerDroiteNode)
 def semantic(self):
     logger.debug(f"Tourner droite node\n\t {self.children}\n")
-
-    check_type(self.children, 'TournerDroite')
     visit_children(self.children)
+    check_type(self.children, 'TournerDroite')
+
+    if type(self.children[1]) == TokenNode:
+        if self.children[1].tok in cache:
+            self.children[1].tok = cache[self.children[1].tok]["variable"].compile()
+
     bodyguard.dict_turtle[self.children[0].tok].turn_right(self.children[1].tok)
 
 @addToClass(AST.PositionXNode)
