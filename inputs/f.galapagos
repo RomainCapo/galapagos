@@ -1,0 +1,6 @@
+Galapagos g = 10 10 500 300;  // Definis une zone pour une tortue
+Tortue t = g 50 50 0; // Cree une tortue dans la zone g
+
+Entier a = 10;
+
+Avancer t 100 + PositionX(t);

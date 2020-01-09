@@ -18,7 +18,7 @@ def compile(self):
 
 @addToClass(AST.OpNode)
 def compile(self):
-    return "{0} {1} {2}".format(self.children[0].compile(), self.op, self.children[1].compile())
+    return self.tok
 
 @addToClass(AST.AssignNode)
 def compile(self):
@@ -130,51 +130,51 @@ if __name__ == "__main__":
     logger = logging.getLogger('compiler')
     logger.setLevel(debug_level)
 
-    try:
-        BASE_DIR = "outputs/pdf/"
+    #try:
+    BASE_DIR = "outputs/pdf/"
 
-        prog = open(file_path).read()
-        logger.info("\n## PARSING: start")
-        ast = parse(prog)
+    prog = open(file_path).read()
+    logger.info("\n## PARSING: start")
+    ast = parse(prog)
 
-        graph = ast.makegraphicaltree()
+    graph = ast.makegraphicaltree()
 
-        if not os.path.exists(BASE_DIR):
-            os.makedirs(BASE_DIR)
+    if not os.path.exists(BASE_DIR):
+        os.makedirs(BASE_DIR)
 
-        path_name = BASE_DIR + os.path.splitext(file_path)[0].split("/")[-1] + '-ast.pdf'
-        graph.write_pdf(path_name)
-        logger.debug(f"{ast}")
-        logger.info("## PARSING: end - success")
-        logger.info(f"wrote ast to : {path_name}")
+    path_name = BASE_DIR + os.path.splitext(file_path)[0].split("/")[-1] + '-ast.pdf'
+    graph.write_pdf(path_name)
+    logger.debug(f"{ast}")
+    logger.info("## PARSING: end - success")
+    logger.info(f"wrote ast to : {path_name}")
 
-        logger.info("## SEMANTIC: start")
-        ast.semantic()
-        logger.info("## SEMANTIC: end - success")
+    logger.info("## SEMANTIC: start")
+    ast.semantic()
+    logger.info("## SEMANTIC: end - success")
 
-        compiled = "let context = document.getElementById('canvas').getContext('2d');\n"
-        compiled += "let animator = new Animator();\n"
-        logger.info("## COMPILER: start")
-        compiled += ast.compile()
-        compiled += "animator.animationsDone();"
-        logger.debug(compiled)
-        logger.info("## COMPILER: end - success")
+    compiled = "let context = document.getElementById('canvas').getContext('2d');\n"
+    compiled += "let animator = new Animator();\n"
+    logger.info("## COMPILER: start")
+    compiled += ast.compile()
+    compiled += "animator.animationsDone();"
+    logger.debug(compiled)
+    logger.info("## COMPILER: end - success")
 
-        BASE_OUTPUT_DIR = "outputs/"
-        OUTPUT_FILENAME = "compiled_code.js"
-        name = BASE_OUTPUT_DIR + OUTPUT_FILENAME
-        outfile = open(name, 'w')
-        outfile.write(compiled)
-        outfile.close()
-        logger.info(f"Wrote code to : {name}")
+    BASE_OUTPUT_DIR = "outputs/"
+    OUTPUT_FILENAME = "compiled_code.js"
+    name = BASE_OUTPUT_DIR + OUTPUT_FILENAME
+    outfile = open(name, 'w')
+    outfile.write(compiled)
+    outfile.close()
+    logger.info(f"Wrote code to : {name}")
 
-        if run_browser:
-            import webbrowser
-            logger.info("Opening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
-            webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
+    if run_browser:
+        import webbrowser
+        logger.info("Opening " + os.path.realpath("ouputs\Galapagos.html") + " ...")
+        webbrowser.open_new_tab('file://' + os.path.realpath("outputs/Galapagos.html"))
 
-    except BaseException as be:
-        logger.error(be)
-        sys.exit(1)
+    #except BaseException as be:
+    #    logger.error(be)
+    #    sys.exit(1)
 
     sys.exit(0)
