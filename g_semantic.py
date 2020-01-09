@@ -32,11 +32,11 @@ def assign_cache(children):
     coords = children[1:]
 
     if identifier in cache:
-        if d_type == 'REASSIGN':
-            if cache[identifier]['type'].upper().strip() != "Entier".upper().strip():
-                raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
-            else:
-                cache[identifier]['variable'] = coords[0]
+        if d_type == 'REASSIGN':#If a node is a Reassign node, we put the new variable value in the dict
+            if cache[identifier]['type'].upper().strip() == "Entier".upper().strip():#Only interger type can be reassign
+               cache[identifier]['variable'] = coords[0]
+            else:# With an other type than Integer that throw up an error.
+                 raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
         else:
             raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
     else:
@@ -87,23 +87,52 @@ def check_type(identifiers, main_type):
                 logger.warning(f"\n\t Warning : Instruction '{main_type}' expected as parameter at pos {i+1} one of those types: {allowed_types[main_type][i]}."\
                     f"\n\t'{identifier.compile()}' ({type(identifier.compile()) if type(identifier.compile()) is not str else 'unknown identifier'}) given.")
 
-def get_val_from_node(node):
-    val = node
-    if isinstance(val, str):
+
+def get_simple_node_value(node):
+    '''
+    Get the node value in the node is a variable or a Position function, otherwise return the integer value
+    :param AST.TokenNode node: node to evaluate
+    :return int: return the int value of the node
+    '''
+    val = node.compile()
+    if isinstance(node, AST.PositionXNode):
+        val = bodyguard.dict_turtle[node.children[0].tok].x
+    elif isinstance(node, AST.PositionYNode):
+        val = bodyguard.dict_turtle[node.children[0].tok].y
+    elif val in cache:
         val = cache[val]["variable"].compile()
     return val
 
-def eval_op_node(node):
+def eval_node_recursively(node):
+    '''
+    Compute the node value recursively. Useful for OpNode object.
+    :param AST.TokenNode: node to evaluate
+    :return string: evaluated node in string format
+    '''
+
     if isinstance(node.children[1], AST.OpNode):
         right_value = node.children[1]
-        left_value = get_val_from_node(node.children[0].compile())
+        left_value = get_simple_node_value(node.children[0])
 
-        return str(left_value) + node.op + eval_op_node(right_value)
+        return str(left_value) + node.op + eval_node_recursively(right_value)
 
-    left_value = get_val_from_node(node.children[0].compile())
-    right_value = get_val_from_node(node.children[1].compile())
+    left_value = get_simple_node_value(node.children[0])
+    right_value = get_simple_node_value(node.children[1])
 
     return str(left_value) + node.op + str(right_value)
+
+def compute_node_value(node):
+    '''
+    Get the value from a simple node or a recursive node.
+    :param AST.TokenNode node: node object
+    :return int: int node value
+    '''
+    val = None
+    if isinstance(node, AST.OpNode):
+        val = int(eval(eval_node_recursively(node)))
+    else :
+        val = get_simple_node_value(node)
+    return val
 
 def visit_children(children):
     for child in children:
@@ -128,35 +157,29 @@ def semantic(self):
 def semantic(self):
     logger.debug(f"Assign node\n\t {self.children}\n")
     assign_cache(self.children) #example: assign_cache(Tortue, t)
-    check_type(self.children[1:], self.children[0].tok[0]) #example: check_type([0, 10, 50, 50], Galapagos)
+
+    '''for i, child in enumerate(self.children[1:]):
+        self.children[i+1].tok = compute_node_value(child)
+
+    check_type(self.children[1:], self.children[0].tok[0]) #example: check_type([0, 10, 50, 50], Galapagos)'''
 
 @addToClass(AST.AvancerNode)
 def semantic(self):
     logger.debug(f"Avancer node\n\t {self.children}\n")
 
-    if isinstance(self.children[1], AST.OpNode):
-        val = int(eval(eval_op_node(self.children[1])))
-        bodyguard.dict_turtle[self.children[0].tok].move_straight(val)
-    else:
-        check_type(self.children, 'Avancer') #example: check_type(['t', 10])
-        if isinstance(self.children[1].tok, str):
-            bodyguard.dict_turtle[self.children[0].tok].move_straight(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
-        else:
-            bodyguard.dict_turtle[self.children[0].tok].move_straight(self.children[1].tok)
+    node_val = compute_node_value(self.children[1])
+    self.children[1].tok = node_val
+    check_type(self.children, 'Avancer')
+    bodyguard.dict_turtle[self.children[0].tok].move_straight(node_val)
 
 @addToClass(AST.ReculerNode)
 def semantic(self):
     logger.debug(f"Reculer node\n\t {self.children}\n")
 
-    if isinstance(self.children[1], AST.OpNode):
-        val = int(eval(eval_op_node(self.children[1])))
-        bodyguard.dict_turtle[self.children[0].tok].move_back(val)
-    else:
-        check_type(self.children, 'Reculer')
-        if isinstance(self.children[1].tok, str):
-            bodyguard.dict_turtle[self.children[0].tok].move_back(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
-        else:
-            bodyguard.dict_turtle[self.children[0].tok].move_back(self.children[1].tok)
+    node_val = compute_node_value(self.children[1])
+    self.children[1].tok = node_val
+    check_type(self.children, 'Reculer')
+    bodyguard.dict_turtle[self.children[0].tok].move_back(node_val)
 
 @addToClass(AST.DecollerNode)
 def semantic(self):
@@ -172,29 +195,19 @@ def semantic(self):
 def semantic(self):
     logger.debug(f"Tourner gauche node\n\t {self.children}\n")
 
-    if isinstance(self.children[1], AST.OpNode):
-        val = int(eval(eval_op_node(self.children[1])))
-        bodyguard.dict_turtle[self.children[0].tok].turn_left(val)
-    else:
-        check_type(self.children, 'Reculer')
-        if isinstance(self.children[1].tok, str):
-            bodyguard.dict_turtle[self.children[0].tok].turn_left(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
-        else:
-            bodyguard.dict_turtle[self.children[0].tok].turn_left(self.children[1].tok)
+    node_val = compute_node_value(self.children[1])
+    self.children[1].tok = node_val
+    check_type(self.children, 'TournerGauche')
+    bodyguard.dict_turtle[self.children[0].tok].turn_left(node_val)
 
 @addToClass(AST.TournerDroiteNode)
 def semantic(self):
     logger.debug(f"Tourner droite node\n\t {self.children}\n")
 
-    if isinstance(self.children[1], AST.OpNode):
-        val = int(eval(eval_op_node(self.children[1])))
-        bodyguard.dict_turtle[self.children[0].tok].turn_right(val)
-    else:
-        check_type(self.children, 'TournerDroite')
-        if isinstance(self.children[1].tok, str):
-            bodyguard.dict_turtle[self.children[0].tok].turn_right(cache[self.children[1].tok]["variable"].compile()) # checking if out of galapagos
-        else:
-            bodyguard.dict_turtle[self.children[0].tok].turn_right(self.children[1].tok)
+    node_val = compute_node_value(self.children[1])
+    self.children[1].tok = node_val
+    check_type(self.children, 'TournerDroite')
+    bodyguard.dict_turtle[self.children[0].tok].turn_right(node_val)
 
 @addToClass(AST.PositionXNode)
 def semantic(self):
