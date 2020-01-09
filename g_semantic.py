@@ -94,13 +94,18 @@ def get_simple_node_value(node):
     :param AST.TokenNode node: node to evaluate
     :return int: return the int value of the node
     '''
-    val = node.tok
+
+    val = 0
+
     if isinstance(node, AST.PositionXNode):
         val = bodyguard.dict_turtle[node.children[0].tok].x
     elif isinstance(node, AST.PositionYNode):
         val = bodyguard.dict_turtle[node.children[0].tok].y
-    elif val in cache:
-        val = cache[val]["variable"].tok
+    elif node.tok in cache:
+        val = cache[node.tok]["variable"].tok
+    else:
+        val = node.tok
+
     return val
 
 def eval_node_recursively(node):
@@ -110,16 +115,20 @@ def eval_node_recursively(node):
     :return string: evaluated node in string format
     '''
 
-    if isinstance(node.children[1], AST.OpNode):
-        right_value = node.children[1]
+    if len(node.children) > 0:
+        if isinstance(node.children[1], AST.OpNode):
+            right_value = node.children[1]
+
+            left_value = get_simple_node_value(node.children[0])
+
+            return str(left_value) + node.op + eval_node_recursively(right_value)
+
         left_value = get_simple_node_value(node.children[0])
+        right_value = get_simple_node_value(node.children[1])
 
-        return str(left_value) + node.op + eval_node_recursively(right_value)
-
-    left_value = get_simple_node_value(node.children[0])
-    right_value = get_simple_node_value(node.children[1])
-
-    return str(left_value) + node.op + str(right_value)
+        return str(left_value) + node.op + str(right_value)
+    else:
+        return str(node.tok)
 
 def compute_node_value(node):
     '''
@@ -128,10 +137,12 @@ def compute_node_value(node):
     :return int: int node value
     '''
     val = None
+
     if isinstance(node, AST.OpNode):
         val = int(eval(eval_node_recursively(node)))
-    else :
+    else:
         val = get_simple_node_value(node)
+
     return val
 
 def visit_children(children):
@@ -152,7 +163,8 @@ def semantic(self):
 
 @addToClass(AST.OpNode)
 def semantic(self):
-    self.tok = int(eval(eval_node_recursively(self)))
+    visit_children(self.children)
+    self.tok = compute_node_value(self)
     self.children = []
     logger.debug(f"Op node\n\t {self.children}\n")
 
@@ -172,7 +184,7 @@ def semantic(self):
     visit_children(self.children)
     check_type(self.children, 'Avancer')
 
-    if type(self.children[1]) == TokenNode:
+    if isinstance(self.children[1], AST.TokenNode):
         if self.children[1].tok in cache:
             self.children[1].tok = cache[self.children[1].tok]["variable"].compile()
     bodyguard.dict_turtle[self.children[0].tok].move_straight(self.children[1].tok)
@@ -183,7 +195,7 @@ def semantic(self):
     visit_children(self.children)
     check_type(self.children, 'Reculer')
 
-    if type(self.children[1]) == TokenNode:
+    if isinstance(self.children[1], AST.TokenNode):
         if self.children[1].tok in cache:
             self.children[1].tok = cache[self.children[1].tok]["variable"].compile()
 
@@ -205,7 +217,7 @@ def semantic(self):
     visit_children(self.children)
     check_type(self.children, 'TournerGauche')
 
-    if type(self.children[1]) == TokenNode:
+    if isinstance(self.children[1], AST.TokenNode):
         if self.children[1].tok in cache:
             self.children[1].tok = cache[self.children[1].tok]["variable"].compile()
 
@@ -217,7 +229,7 @@ def semantic(self):
     visit_children(self.children)
     check_type(self.children, 'TournerDroite')
 
-    if type(self.children[1]) == TokenNode:
+    if isinstance(self.children[1], AST.TokenNode):
         if self.children[1].tok in cache:
             self.children[1].tok = cache[self.children[1].tok]["variable"].compile()
 
@@ -226,12 +238,14 @@ def semantic(self):
 @addToClass(AST.PositionXNode)
 def semantic(self):
     logger.debug(f"Position x node\n\t {self.children}")
-    check_type(self.children[0])
+    self.tok = compute_node_value(self)
+    #check_type(self.children[0])
 
 @addToClass(AST.PositionYNode)
 def semantic(self):
     logger.debug(f"Position y node\n\t {self.children}")
-    check_type(self.children[0])
+    self.tok = compute_node_value(self)
+    #check_type(self.children[0])
 
 @addToClass(AST.TqNode)
 def semantic(self):
