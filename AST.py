@@ -16,6 +16,7 @@ class Node:
     count = 0
     type = 'Node (unspecified)'
     shape = 'ellipse'
+    parent = None
     def __init__(self,children=None):
         self.ID = str(Node.count)
         Node.count+=1

@@ -21,6 +21,8 @@ if len(self.children) != 1:
 cache = {}
 bodyguard = Bodyguard()
 
+is_in_while = False
+
 def assign_cache(children):
     '''
     When a new variable is declared, add it to the dictionnary (cache).
@@ -35,7 +37,8 @@ def assign_cache(children):
         if d_type == 'REASSIGN':#If a node is a Reassign node, we put the new variable value in the dict
             if cache[identifier]['type'].upper().strip() == "Entier".upper().strip():#Only interger type can be reassign
                 node_val = compute_node_value(coords[0])
-                children[1] = AST.TokenNode(node_val)
+                if not is_in_while:
+                    children[1] = AST.TokenNode(node_val)
                 cache[identifier]['variable'] = node_val
             else:# With an other type than Integer that throw up an error.
                  raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
@@ -80,8 +83,6 @@ def check_type(identifiers, main_type):
     Example with "Tortue t = g 10 10 0;":
         identifiers: [g, 10, 10, 0]
         main_type: Tortue'''
-
-    print("identifier :", identifiers)
 
     for i, identifier in enumerate(identifiers):
         if identifier.compile() in cache:
@@ -142,7 +143,10 @@ def compute_node_value(node):
 
 def visit_children(children):
     for child in children:
+        child.parent = children
         child.semantic()
+    if is_in_while:
+        return children
 
 @addToClass(AST.ProgramNode)
 def semantic(self):
@@ -222,8 +226,31 @@ def semantic(self):
 
 @addToClass(AST.TqNode)
 def semantic(self):
-    logger.debug(f"Tq node\n\t {self.children}\n")
-    visit_children(self.children)
+    logger.debug(f"Tq node\n\t {self.children}\n") # maybe move this debug inside while ?
+
+    global is_in_while
+    is_in_while = True
+    
+    left = compute_node_value(self.children[0].children[0])
+    right = compute_node_value(self.children[0].children[1])
+    cond = self.children[0].op
+
+    while_s = str(left) + cond + str(right)
+    nodes_to_push = []
+    while(eval(while_s)):
+        nodes_to_push.append(visit_children(self.children))
+        left = compute_node_value(self.children[0].children[0])
+        right = compute_node_value(self.children[0].children[1])
+        while_s = str(left) + cond + str(right)
+    
+    index_while = [str(type(x)) for x in self.parent].index("<class 'AST.TqNode'>")
+    del self.parent[index_while]
+    for x in nodes_to_push:
+        self.parent[index_while:index_while] = x[1].children
+        index_while += 1
+    
+    is_in_while = False
+
 
 @addToClass(AST.SiNode)
 def semantic(self):

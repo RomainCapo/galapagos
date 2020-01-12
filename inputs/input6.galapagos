@@ -13,8 +13,11 @@ Tq a < 3
 
 	Si PositionY(t2) > 5
 	{
-		Avancer t2 55;
+		Avancer t2 15;
 	};
-	Avancer t1 70;
+	Avancer t1 30;
 	TournerGauche t1 90;
 };
+
+a = 12;
+Avancer t1 a;
