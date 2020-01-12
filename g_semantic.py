@@ -34,7 +34,9 @@ def assign_cache(children):
     if identifier in cache:
         if d_type == 'REASSIGN':#If a node is a Reassign node, we put the new variable value in the dict
             if cache[identifier]['type'].upper().strip() == "Entier".upper().strip():#Only interger type can be reassign
-               cache[identifier]['variable'] = coords[0]
+                node_val = compute_node_value(coords[0])
+                children[1] = AST.TokenNode(node_val)
+                cache[identifier]['variable'] = node_val
             else:# With an other type than Integer that throw up an error.
                  raise Exception(f"Error: Redefinition of '{identifier}'. Check your grammar yo")
         else:
@@ -49,7 +51,9 @@ def assign_cache(children):
             bodyguard.add_turtle(identifier, turtle)
             cache[identifier] = {"type" : d_type, "variable": turtle}
         elif d_type == "Entier":
-            cache[identifier] = {"type" : "Entier", "variable": coords[0]}
+            node_val = compute_node_value(coords[0])
+            children[1] = AST.TokenNode(node_val)
+            cache[identifier] = {"type" : "Entier", "variable": node_val}
 
 allowed_types = {
     'Galapagos': [[int, float, 'Entier'], [int, float, 'Entier'], [int, float, 'Entier'], [int, float, 'Entier']],
@@ -77,6 +81,8 @@ def check_type(identifiers, main_type):
         identifiers: [g, 10, 10, 0]
         main_type: Tortue'''
 
+    print("identifier :", identifiers)
+
     for i, identifier in enumerate(identifiers):
         if identifier.compile() in cache:
             if cache[identifier.compile()]["type"] not in allowed_types[main_type][i]:
@@ -100,7 +106,7 @@ def get_simple_node_value(node):
     elif isinstance(node, AST.PositionYNode):
         val = bodyguard.dict_turtle[node.children[0].tok].y
     elif val in cache:
-        val = cache[val]["variable"].compile()
+        val = cache[val]["variable"]
     return val
 
 def eval_node_recursively(node):
@@ -158,17 +164,12 @@ def semantic(self):
     logger.debug(f"Assign node\n\t {self.children}\n")
     assign_cache(self.children) #example: assign_cache(Tortue, t)
 
-    '''for i, child in enumerate(self.children[1:]):
-        self.children[i+1].tok = compute_node_value(child)
-
-    check_type(self.children[1:], self.children[0].tok[0]) #example: check_type([0, 10, 50, 50], Galapagos)'''
-
 @addToClass(AST.AvancerNode)
 def semantic(self):
     logger.debug(f"Avancer node\n\t {self.children}\n")
 
     node_val = compute_node_value(self.children[1])
-    self.children[1].tok = node_val
+    self.children[1]= AST.TokenNode(node_val)
     check_type(self.children, 'Avancer')
     bodyguard.dict_turtle[self.children[0].tok].move_straight(node_val)
 
@@ -177,7 +178,7 @@ def semantic(self):
     logger.debug(f"Reculer node\n\t {self.children}\n")
 
     node_val = compute_node_value(self.children[1])
-    self.children[1].tok = node_val
+    self.children[1]= AST.TokenNode(node_val)
     check_type(self.children, 'Reculer')
     bodyguard.dict_turtle[self.children[0].tok].move_back(node_val)
 
@@ -196,7 +197,7 @@ def semantic(self):
     logger.debug(f"Tourner gauche node\n\t {self.children}\n")
 
     node_val = compute_node_value(self.children[1])
-    self.children[1].tok = node_val
+    self.children[1]= AST.TokenNode(node_val)
     check_type(self.children, 'TournerGauche')
     bodyguard.dict_turtle[self.children[0].tok].turn_left(node_val)
 
@@ -205,7 +206,7 @@ def semantic(self):
     logger.debug(f"Tourner droite node\n\t {self.children}\n")
 
     node_val = compute_node_value(self.children[1])
-    self.children[1].tok = node_val
+    self.children[1]= AST.TokenNode(node_val)
     check_type(self.children, 'TournerDroite')
     bodyguard.dict_turtle[self.children[0].tok].turn_right(node_val)
 

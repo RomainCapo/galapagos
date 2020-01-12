@@ -1,7 +1,4 @@
-Entier a = 100;
-a = 50;
+Galapagos g = 10 10 500 300;
+Tortue t = g 50 50 0;
 
-Galapagos g = 10 10 130 130;
-Tortue t = g 15 15 0;
-
-Avancer t a;
+Avancer t 100;
