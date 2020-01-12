@@ -145,8 +145,8 @@ def visit_children(children):
     for child in children:
         child.parent = children
         child.semantic()
-    if is_in_while:
-        return children
+    #if is_in_while:
+    return children
 
 @addToClass(AST.ProgramNode)
 def semantic(self):
@@ -255,4 +255,20 @@ def semantic(self):
 @addToClass(AST.SiNode)
 def semantic(self):
     logger.debug(f"Si node\n\t {self.children}\n")
-    visit_children(self.children)
+    
+    left = compute_node_value(self.children[0].children[0])
+    right = compute_node_value(self.children[0].children[1])
+    cond = self.children[0].op
+
+    if_s = str(left) + cond + str(right)
+    nodes_to_push = []
+
+    if(eval(if_s)):
+        nodes_to_push.append(visit_children(self.children)) 
+		
+    index_if =  [str(type(x)) for x in self.parent].index("<class 'AST.SiNode'>")
+    del self.parent[index_if]
+
+    for x in nodes_to_push:
+        self.parent[index_if:index_if] = x[1].children
+        index_if += 1
