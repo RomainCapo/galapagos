@@ -1,5 +1,4 @@
 import unittest
-import g_compiler
 import os
 import subprocess
 
