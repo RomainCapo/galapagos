@@ -1,4 +1,5 @@
 import ply.yacc as yacc
+from g_lexer import tokens
 import AST
 import os
 import logging
