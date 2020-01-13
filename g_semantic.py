@@ -5,19 +5,6 @@ import logging
 
 logger = logging.getLogger('compiler')
 
-'''
-DEV note:
-Pour l'instant, le correct nombre de d'arguments est géré dans g_parser.py (la méthode p_error(p)).
-Cette méthode est call par exemple quand qqn écrit "Decoller t 12" (ce qui est faux).
-Si, après discussion, nous voudrions gérer ces erreurs de nombre d'args ici, on utiliserait qqch comme ceci, par exemple:
-
-if len(self.children) != 1:
-        raise Exception(f"Error: 'Decoller' does not take properties.")
-    else:
-        raise Exception(f"{len(self.children)}")
-
-'''
-
 cache = {}
 bodyguard = Bodyguard()
 
@@ -58,6 +45,7 @@ def assign_cache(children):
             children[1] = AST.TokenNode(node_val)
             cache[identifier] = {"type" : "Entier", "variable": node_val}
 
+# allowed types for each nodes
 allowed_types = {
     'Galapagos': [[int, float, 'Entier'], [int, float, 'Entier'], [int, float, 'Entier'], [int, float, 'Entier']],
     'Tortue': [['Galapagos'], [int, float, 'Entier'], [int, float, 'Entier'], [int, float, 'Entier']],
@@ -225,26 +213,28 @@ def semantic(self):
 
 @addToClass(AST.TqNode)
 def semantic(self):
-    logger.debug(f"Tq node\n\t {self.children}\n") # maybe move this debug inside while ?
+    logger.debug(f"Tq node\n\t {self.children}\n")
 
-    global is_in_while
+    # we want to optimize the while node: We dont want any 'while' in compiled_code.
+
+    global is_in_while # turning ON the flag that tells we're optimizing a while node
     is_in_while = True
     
-    left = compute_node_value(self.children[0].children[0])
-    right = compute_node_value(self.children[0].children[1])
-    cond = self.children[0].op
+    left = compute_node_value(self.children[0].children[0]) # left part of the while condition
+    right = compute_node_value(self.children[0].children[1]) # right part of the while condition
+    cond = self.children[0].op # comparator of the while condition
 
-    while_s = str(left) + cond + str(right)
-    nodes_to_push = []
+    while_s = str(left) + cond + str(right) # while condition
+    nodes_to_push = [] # list with all the instructions that will replace the while
     while(eval(while_s)):
-        nodes_to_push.append(visit_children(self.children))
+        nodes_to_push.append(visit_children(self.children)) # pushing instruction in list
         left = compute_node_value(self.children[0].children[0])
         right = compute_node_value(self.children[0].children[1])
-        while_s = str(left) + cond + str(right)
+        while_s = str(left) + cond + str(right) # new while
     
-    index_while = [str(type(x)) for x in self.parent].index("<class 'AST.TqNode'>")
-    del self.parent[index_while]
-    for x in nodes_to_push:
+    index_while = [str(type(x)) for x in self.parent].index("<class 'AST.TqNode'>") # index of the while node, where to replace
+    del self.parent[index_while] # deleting while
+    for x in nodes_to_push: # and replacing it with all instructions
         self.parent[index_while:index_while] = x[1].children
         index_while += len(x[1].children)
     
@@ -255,19 +245,21 @@ def semantic(self):
 def semantic(self):
     logger.debug(f"Si node\n\t {self.children}\n")
     
-    left = compute_node_value(self.children[0].children[0])
-    right = compute_node_value(self.children[0].children[1])
-    cond = self.children[0].op
+    # we want to optimize the if node: We dont want any 'if' in compiled_code, only instructions with true conditions.
+
+    left = compute_node_value(self.children[0].children[0]) # left par of the condition
+    right = compute_node_value(self.children[0].children[1]) # right part of the condition
+    cond = self.children[0].op # comparator of the confition
 
     if_s = str(left) + cond + str(right)
-    nodes_to_push = []
+    nodes_to_push = [] # list of instructions that will replace the if condition
 
     if(eval(if_s)):
         nodes_to_push.append(visit_children(self.children)) 
 
-    index_if =  [str(type(x)) for x in self.parent].index("<class 'AST.SiNode'>")
-    del self.parent[index_if]
+    index_if =  [str(type(x)) for x in self.parent].index("<class 'AST.SiNode'>") # index of the if node
+    del self.parent[index_if] # deleting the if node
 
-    for x in nodes_to_push:
+    for x in nodes_to_push: # and replacing it with instructions that have true conditions
         self.parent[index_if:index_if] = x[1].children
         index_if += len(x[1].children)

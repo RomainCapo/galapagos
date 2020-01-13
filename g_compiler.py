@@ -71,25 +71,6 @@ def compile(self):
 def compile(self):
     return "{0}.getPosY()".format(self.children[0].compile())
 
-@addToClass(AST.SiNode)
-def compile(self):
-    js_code = ""
-    js_code += "if({0})".format(self.children[0].compile())
-    js_code += "{\n"
-    js_code += "\t" + self.children[1].compile()
-    js_code += "}"
-    return js_code
-
-@addToClass(AST.TqNode)
-def compile(self):
-    js_code = ""
-    js_code += "while({0})".format(self.children[0].compile())
-    js_code += "{\n"
-    js_code += "\t" + self.children[1].compile()
-    js_code += "}"
-    return js_code
-
-
 def is_valid_file(file):
     if not file.endswith(".galapagos"):
         raise argparse.ArgumentTypeError('File must have a galapagos extension')

@@ -18,3 +18,13 @@ Tq a < 3
 	Avancer t1 40;
 	TournerGauche t1 90;
 };
+
+Si PositionY(t2) > 50
+{
+	Avancer t2 30;
+};
+
+Si PositionY(t2) < 10
+{
+	Avancer t2 30;
+};
