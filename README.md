@@ -1,5 +1,11 @@
 # Galapagos
 
-## [repo git](https://labinfo.ing.he-arc.ch/gitlab/jonas.freiburg/galapagos)
+Project done for the compiler lecture during the 5th bachelor semester.
+The galapagos project is an easy to use programming language.
+Reserved words are in french.
 
-Les exemples sont sous le dossier _inputs/*_.
+## Team 
+
+* @ourfbht
+* @RomainCapo
+* @JonasFreibur 
