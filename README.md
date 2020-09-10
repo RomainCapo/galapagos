@@ -9,3 +9,9 @@ Reserved words are in french.
 * @ourfbht
 * @RomainCapo
 * @JonasFreibur 
+
+## Team
+
+* Jonas Freiburghaus [@JonasFreibur](https://github.com/JonasFreibur)
+* Romain Capocasale [@RomainCapo](https://github.com/RomainCapo)
+* ourfbht [@ourfbht](https://github.com/ourfbht)
